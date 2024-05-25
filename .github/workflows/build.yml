@@ -74,6 +74,11 @@ jobs:
       - name: Restore build artifact permissions
         run: cd .vitepress/dist && setfacl --restore=permissions-backup.acl
         continue-on-error: true
+      - name: Setup pnpm
+        with:
+          version: "9"
+      - name: Install Netlify CLI
+        run: pnpm add netlify-cli
       - name: Deploy to Netlify
         id: netlify-deploy
         uses: netlify/actions/cli@master
@@ -116,6 +121,11 @@ jobs:
       - name: Restore build artifact permissions
         run: cd .vitepress/dist && setfacl --restore=permissions-backup.acl
         continue-on-error: true
+      - name: Setup pnpm
+        with:
+          version: "9"
+      - name: Install Netlify CLI
+        run: pnpm add netlify-cli
       - name: Deploy to Netlify
         id: netlify-deploy
         uses: netlify/actions/cli@master

@@ -136,6 +136,16 @@ const deployJob = (options: DeployJobOptions): Job => {
     },
     steps: [
       {
+        name: "Setup pnpm",
+        with: {
+          version: "9",
+        },
+      },
+      {
+        name: "Install Netlify CLI",
+        run: "pnpm add netlify-cli",
+      },
+      {
         name: "Deploy to Netlify",
         id: "netlify-deploy",
         uses: "netlify/actions/cli@master",
