@@ -122,7 +122,7 @@ const deployJob = (options: DeployJobOptions): Job => {
   const netlifyPreviewUrl = isPr
     ? "${{ steps.netlify-deploy.outputs.NETLIFY_URL }}"
     : "${{ steps.netlify-deploy.outputs.NETLIFY_LIVE_URL }}";
-  const prAlias = "pr-${{ github.sha }} ";
+  const prAlias = "pr-${{ github.sha }}";
 
   return {
     name: jobName,
@@ -163,21 +163,6 @@ const deployJob = (options: DeployJobOptions): Job => {
       },
       /*
       {
-        name: "Deploy to Netlify",
-        id: "netlify-deploy",
-        uses: "netlify/actions/cli@master",
-        with: {
-          args: isPr
-            ? `deploy --dir=${NETLIFY_DEPLOY_DIR}`
-            : `deploy --dir=${NETLIFY_DEPLOY_DIR} --prod`,
-        },
-        env: {
-          NETLIFY_AUTH_TOKEN,
-          NETLIFY_SITE_ID,
-        },
-      },
-      */
-      {
         name: "Audit URL(s) using Lighthouse",
         uses: "treosh/lighthouse-ci-action@v11",
         with: {
@@ -186,13 +171,8 @@ const deployJob = (options: DeployJobOptions): Job => {
           temporaryPublicStorage: true,
           runs: 3,
         },
-        // see: https://github.com/treosh/lighthouse-ci-action/issues/21
-        /*
-        env: {
-          LHCI_BUILD_CONTEXT__CURRENT_HASH: "${{ github.sha }}",
-        },
-        */
       },
+      */
       {
         name: "Publish Summary",
         run: [
