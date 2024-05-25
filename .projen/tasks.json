@@ -64,7 +64,31 @@
           "exec": "tsc --build"
         },
         {
-          "exec": "npx projen vitepress:build"
+          "exec": "npx projen content:build"
+        }
+      ]
+    },
+    "content:build": {
+      "name": "content:build",
+      "steps": [
+        {
+          "exec": "vitepress build content"
+        }
+      ]
+    },
+    "content:dev": {
+      "name": "content:dev",
+      "steps": [
+        {
+          "exec": "vitepress dev content"
+        }
+      ]
+    },
+    "content:preview": {
+      "name": "content:preview",
+      "steps": [
+        {
+          "exec": "vitepress preview content"
         }
       ]
     },
@@ -176,30 +200,6 @@
         },
         {
           "spawn": "post-upgrade"
-        }
-      ]
-    },
-    "vitepress:build": {
-      "name": "vitepress:build",
-      "steps": [
-        {
-          "exec": "vitepress build"
-        }
-      ]
-    },
-    "vitepress:dev": {
-      "name": "vitepress:dev",
-      "steps": [
-        {
-          "exec": "vitepress dev"
-        }
-      ]
-    },
-    "vitepress:preview": {
-      "name": "vitepress:preview",
-      "steps": [
-        {
-          "exec": "vitepress preview"
         }
       ]
     },
