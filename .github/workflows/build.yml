@@ -88,8 +88,6 @@ jobs:
         run: netlify deploy --dir=.vitepress/dist
       - name: Audit URL(s) using Lighthouse
         uses: treosh/lighthouse-ci-action@v11
-        env:
-          LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.sha }}
         with:
           urls: ${{ steps.netlify-deploy.outputs.NETLIFY_URL }}
           uploadArtifacts: true
@@ -134,8 +132,6 @@ jobs:
         run: netlify deploy --dir=.vitepress/dist --prod
       - name: Audit URL(s) using Lighthouse
         uses: treosh/lighthouse-ci-action@v11
-        env:
-          LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.sha }}
         with:
           urls: ${{ steps.netlify-deploy.outputs.NETLIFY_LIVE_URL }}
           uploadArtifacts: true

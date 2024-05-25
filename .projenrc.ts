@@ -119,6 +119,9 @@ const deployJob = (options: DeployJobOptions): Job => {
   const jobName =
     options.jobName ?? options.isPr ? "deploy-preview" : "deploy-main";
   const productionBranch = options.productionBranch ?? "main";
+  const netlifyPreviewUrl = isPr
+    ? "${{ steps.netlify-deploy.outputs.NETLIFY_URL }}"
+    : "${{ steps.netlify-deploy.outputs.NETLIFY_LIVE_URL }}";
 
   return {
     name: jobName,
@@ -177,19 +180,17 @@ const deployJob = (options: DeployJobOptions): Job => {
         name: "Audit URL(s) using Lighthouse",
         uses: "treosh/lighthouse-ci-action@v11",
         with: {
-          urls: isPr
-            ? ["${{ steps.netlify-deploy.outputs.NETLIFY_URL }}"].join("\n")
-            : ["${{ steps.netlify-deploy.outputs.NETLIFY_LIVE_URL }}"].join(
-                "\n",
-              ),
+          urls: [netlifyPreviewUrl].join("\n"),
           uploadArtifacts: true,
           temporaryPublicStorage: true,
           runs: 3,
         },
         // see: https://github.com/treosh/lighthouse-ci-action/issues/21
+        /*
         env: {
           LHCI_BUILD_CONTEXT__CURRENT_HASH: "${{ github.sha }}",
         },
+        */
       },
       {
         name: "Publish Summary",
@@ -198,9 +199,7 @@ const deployJob = (options: DeployJobOptions): Job => {
           `echo "- Netlify URL: $NETLIFY_URL" >> $GITHUB_STEP_SUMMARY`,
         ].join("\n"),
         env: {
-          NETLIFY_URL: isPr
-            ? "${{ steps.netlify-deploy.outputs.NETLIFY_URL }}"
-            : "${{ steps.netlify-deploy.outputs.NETLIFY_LIVE_URL }}",
+          NETLIFY_URL: netlifyPreviewUrl,
         },
       },
     ],
