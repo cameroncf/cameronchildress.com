@@ -24,13 +24,21 @@ const project = new typescript.TypeScriptAppProject({
   // packageName: undefined,  /* The "name" in package.json. */
 });
 
+/**
+ * VitePress Configuration
+ */
+
 // Exclude Vitepress build artifacts from git
 project.gitignore.exclude(".vitepress/dist", ".vitepress/cache");
 
 // Add Vitepress tasks
-project.addTask("docs:dev").exec("vitepress dev docs");
-project.addTask("docs:build").exec("vitepress build docs");
-project.addTask("docs:preview").exec("vitepress preview docs");
+project.addTask("vitepress:dev").exec("vitepress dev");
+project.addTask("vitepress:build").exec("vitepress build");
+project.addTask("vitepress:preview").exec("vitepress preview");
+
+/**
+ * VSCode Configuration
+ */
 
 const vscode = new VsCode(project);
 
@@ -55,4 +63,19 @@ vsSettings.addSetting("eslint.workingDirectories", [{ mode: "auto" }]);
 const vsExtensions = new VsCodeRecommendedExtensions(vscode);
 vsExtensions.addRecommendations("dbaeumer.vscode-eslint");
 
+/*******************************************************************************
+ *
+ * Build Workflow
+ *
+ * Projen does not support VitePress out of the box, so we need to add the build
+ * command here as part of Projen's compile process. We'll add it as part of the
+ * compile process.
+ *
+ ******************************************************************************/
+
+project.compileTask.exec("npx projen vitepress:build");
+
+/**
+ * Generate the project
+ */
 project.synth();

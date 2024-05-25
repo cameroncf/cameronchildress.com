@@ -62,6 +62,9 @@
       "steps": [
         {
           "exec": "tsc --build"
+        },
+        {
+          "exec": "npx projen vitepress:build"
         }
       ]
     },
@@ -71,30 +74,6 @@
       "steps": [
         {
           "exec": "ts-node --project tsconfig.dev.json .projenrc.ts"
-        }
-      ]
-    },
-    "docs:build": {
-      "name": "docs:build",
-      "steps": [
-        {
-          "exec": "vitepress build docs"
-        }
-      ]
-    },
-    "docs:dev": {
-      "name": "docs:dev",
-      "steps": [
-        {
-          "exec": "vitepress dev docs"
-        }
-      ]
-    },
-    "docs:preview": {
-      "name": "docs:preview",
-      "steps": [
-        {
-          "exec": "vitepress preview docs"
         }
       ]
     },
@@ -197,6 +176,30 @@
         },
         {
           "spawn": "post-upgrade"
+        }
+      ]
+    },
+    "vitepress:build": {
+      "name": "vitepress:build",
+      "steps": [
+        {
+          "exec": "vitepress build"
+        }
+      ]
+    },
+    "vitepress:dev": {
+      "name": "vitepress:dev",
+      "steps": [
+        {
+          "exec": "vitepress dev"
+        }
+      ]
+    },
+    "vitepress:preview": {
+      "name": "vitepress:preview",
+      "steps": [
+        {
+          "exec": "vitepress preview"
         }
       ]
     },
