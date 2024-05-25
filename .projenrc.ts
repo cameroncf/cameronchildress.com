@@ -13,7 +13,7 @@ import {
 
 const NETLIFY_SITE_ID = "7840347a-1605-469f-878f-bc76c7333db4";
 const NETLIFY_AUTH_TOKEN = "${{ secrets.NETLIFY_AUTH_TOKEN }}";
-const NETLIFY_DEPLOY_DIR = ".vitepress/dist";
+const NETLIFY_DEPLOY_DIR = "content/.vitepress/dist";
 
 /**
  * Projen Config
