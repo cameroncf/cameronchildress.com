@@ -131,7 +131,7 @@ const deployJob = (options: DeployJobOptions): Job => {
   const netlifyPreviewUrl = isPr
     ? "${{ steps.netlify-deploy.outputs.NETLIFY_URL }}"
     : "${{ steps.netlify-deploy.outputs.NETLIFY_LIVE_URL }}";
-  const prAlias = "pr-${{ github.sha }}";
+  const prAlias = "pr-${{ github.event.number }}";
 
   return {
     name: jobName,
