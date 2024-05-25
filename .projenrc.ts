@@ -56,12 +56,15 @@ const project = new typescript.TypeScriptAppProject({
  */
 
 // Exclude Vitepress build artifacts from git
-project.gitignore.exclude(".vitepress/dist", ".vitepress/cache");
+project.gitignore.exclude(
+  "content/.vitepress/dist",
+  "content/.vitepress/cache",
+);
 
 // Add Vitepress tasks
-project.addTask("vitepress:dev").exec("vitepress dev");
-project.addTask("vitepress:build").exec("vitepress build");
-project.addTask("vitepress:preview").exec("vitepress preview");
+project.addTask("content:dev").exec("vitepress dev content");
+project.addTask("content:build").exec("vitepress build content");
+project.addTask("content:preview").exec("vitepress preview content");
 
 /**
  * VSCode Configuration
@@ -100,7 +103,7 @@ vsExtensions.addRecommendations("dbaeumer.vscode-eslint");
  *
  ******************************************************************************/
 
-project.compileTask.exec("npx projen vitepress:build");
+project.compileTask.exec("npx projen content:build");
 
 /*******************************************************************************
  *
