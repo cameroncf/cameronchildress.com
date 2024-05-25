@@ -82,12 +82,12 @@ jobs:
           NETLIFY_SITE_ID: 7840347a-1605-469f-878f-bc76c7333db4
         with:
           args: deploy --dir=.vitepress/dist
-      - name: Audit URLs using Lighthouse
+      - name: Audit URL(s) using Lighthouse
         uses: treosh/lighthouse-ci-action@v10
         env:
           LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.sha }}
         with:
-          urls: ${{ steps.deploy-preview.outputs.NETLIFY_URL }}
+          urls: ${{ steps.netlify-deploy.outputs.NETLIFY_URL }}
           uploadArtifacts: true
           temporaryPublicStorage: true
           runs: 3
@@ -124,12 +124,12 @@ jobs:
           NETLIFY_SITE_ID: 7840347a-1605-469f-878f-bc76c7333db4
         with:
           args: deploy --dir=.vitepress/dist --prod
-      - name: Audit URLs using Lighthouse
+      - name: Audit URL(s) using Lighthouse
         uses: treosh/lighthouse-ci-action@v10
         env:
           LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.sha }}
         with:
-          urls: ${{ steps.deploy-preview.outputs.NETLIFY_URL }}
+          urls: ${{ steps.netlify-deploy.outputs.NETLIFY_LIVE_URL }}
           uploadArtifacts: true
           temporaryPublicStorage: true
           runs: 3

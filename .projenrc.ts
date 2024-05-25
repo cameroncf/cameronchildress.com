@@ -150,10 +150,14 @@ const deployJob = (options: DeployJobOptions): Job => {
         },
       },
       {
-        name: "Audit URLs using Lighthouse",
+        name: "Audit URL(s) using Lighthouse",
         uses: "treosh/lighthouse-ci-action@v10",
         with: {
-          urls: ["${{ steps.deploy-preview.outputs.NETLIFY_URL }}"].join("\n"),
+          urls: isPr
+            ? ["${{ steps.netlify-deploy.outputs.NETLIFY_URL }}"].join("\n")
+            : ["${{ steps.netlify-deploy.outputs.NETLIFY_LIVE_URL }}"].join(
+                "\n",
+              ),
           uploadArtifacts: true,
           temporaryPublicStorage: true,
           runs: 3,
