@@ -151,7 +151,7 @@ const deployJob = (options: DeployJobOptions): Job => {
       },
       {
         name: "Audit URL(s) using Lighthouse",
-        uses: "treosh/lighthouse-ci-action@v10",
+        uses: "treosh/lighthouse-ci-action@v11.4.0",
         with: {
           urls: isPr
             ? ["${{ steps.netlify-deploy.outputs.NETLIFY_URL }}"].join("\n")

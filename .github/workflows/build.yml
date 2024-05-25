@@ -83,7 +83,7 @@ jobs:
         with:
           args: deploy --dir=.vitepress/dist
       - name: Audit URL(s) using Lighthouse
-        uses: treosh/lighthouse-ci-action@v10
+        uses: treosh/lighthouse-ci-action@v11.4.0
         env:
           LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.sha }}
         with:
@@ -125,7 +125,7 @@ jobs:
         with:
           args: deploy --dir=.vitepress/dist --prod
       - name: Audit URL(s) using Lighthouse
-        uses: treosh/lighthouse-ci-action@v10
+        uses: treosh/lighthouse-ci-action@v11.4.0
         env:
           LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.sha }}
         with:
