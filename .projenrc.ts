@@ -153,7 +153,7 @@ const deployJob = (options: DeployJobOptions): Job => {
         name: "Deploy to Netlify",
         id: "netlify-deploy",
         run: isPr
-          ? `netlify deploy --dir=${NETLIFY_DEPLOY_DIR}`
+          ? `netlify deploy --dir=${NETLIFY_DEPLOY_DIR} --alias=pr-${process.env.GITHUB_SHA} --json`
           : `netlify deploy --dir=${NETLIFY_DEPLOY_DIR} --prod`,
         env: {
           NETLIFY_AUTH_TOKEN,
