@@ -129,7 +129,7 @@ const deployJob = (options: DeployJobOptions): Job => {
     },
     if: isPr
       ? `startsWith( github.ref, 'refs/pull/' )`
-      : `startsWith( github.ref, 'refs/heads/${productionBranch}`,
+      : `startsWith( github.ref, 'refs/heads/${productionBranch}' )`,
     concurrency: jobName,
     permissions: {
       contents: JobPermission.READ,

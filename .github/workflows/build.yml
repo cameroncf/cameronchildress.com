@@ -106,7 +106,7 @@ jobs:
     concurrency: deploy-main
     env:
       CI: "true"
-    if: startsWith( github.ref, 'refs/heads/main
+    if: startsWith( github.ref, 'refs/heads/main' )
     steps:
       - name: Download build artifacts
         uses: actions/download-artifact@v4
