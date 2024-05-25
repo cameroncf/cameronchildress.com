@@ -5,7 +5,7 @@ layout: home
 hero:
   name: "My Personal Website"
   text: "Cameron Childress"
-  tagline: A minimal site designed using VitePress
+  tagline: A minimal site built with VitePress
   actions:
     - theme: brand
       text: My Resume
