@@ -122,6 +122,7 @@ const deployJob = (options: DeployJobOptions): Job => {
   const netlifyPreviewUrl = isPr
     ? "${{ steps.netlify-deploy.outputs.NETLIFY_URL }}"
     : "${{ steps.netlify-deploy.outputs.NETLIFY_LIVE_URL }}";
+  const prAlias = "pr-${{ github.sha }} ";
 
   return {
     name: jobName,
@@ -153,7 +154,7 @@ const deployJob = (options: DeployJobOptions): Job => {
         name: "Deploy to Netlify",
         id: "netlify-deploy",
         run: isPr
-          ? `netlify deploy --dir=${NETLIFY_DEPLOY_DIR} --alias=pr-${process.env.GITHUB_SHA} --json`
+          ? `netlify deploy --dir=${NETLIFY_DEPLOY_DIR} --alias=${prAlias} --json`
           : `netlify deploy --dir=${NETLIFY_DEPLOY_DIR} --prod`,
         env: {
           NETLIFY_AUTH_TOKEN,
