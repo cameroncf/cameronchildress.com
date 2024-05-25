@@ -24,6 +24,14 @@ const project = new typescript.TypeScriptAppProject({
   // packageName: undefined,  /* The "name" in package.json. */
 });
 
+// Exclude Vitepress build artifacts from git
+project.gitignore.exclude(".vitepress/dist", ".vitepress/cache");
+
+// Add Vitepress tasks
+project.addTask("docs:dev").exec("vitepress dev docs");
+project.addTask("docs:build").exec("vitepress build docs");
+project.addTask("docs:preview").exec("vitepress preview docs");
+
 const vscode = new VsCode(project);
 
 // VSCODE: Root level editor settings
