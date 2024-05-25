@@ -36,6 +36,15 @@ const project = new typescript.TypeScriptAppProject({
 
   artifactsDirectory: NETLIFY_DEPLOY_DIR,
 
+  /**
+   * Build on pr, manually, and also when main is pushed (aka: PR approved and merged)
+   */
+  buildWorkflowTriggers: {
+    pullRequest: {},
+    workflowDispatch: {},
+    push: { branches: ["main"] },
+  },
+
   // deps: [],                /* Runtime dependencies of this module. */
   // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
   // devDeps: [],             /* Build dependencies for this module. */
