@@ -75,20 +75,19 @@ jobs:
         run: cd .vitepress/dist && setfacl --restore=permissions-backup.acl
         continue-on-error: true
       - name: Setup pnpm
+        uses: pnpm/action-setup@v3
         with:
           version: "9"
       - name: Install Netlify CLI
         run: pnpm add netlify-cli
       - name: Deploy to Netlify
         id: netlify-deploy
-        uses: netlify/actions/cli@master
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: 7840347a-1605-469f-878f-bc76c7333db4
-        with:
-          args: deploy --dir=.vitepress/dist
+        run: netlify deploy --dir=.vitepress/dist
       - name: Audit URL(s) using Lighthouse
-        uses: treosh/lighthouse-ci-action@v11.4.0
+        uses: treosh/lighthouse-ci-action@v11
         env:
           LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.sha }}
         with:
@@ -122,20 +121,19 @@ jobs:
         run: cd .vitepress/dist && setfacl --restore=permissions-backup.acl
         continue-on-error: true
       - name: Setup pnpm
+        uses: pnpm/action-setup@v3
         with:
           version: "9"
       - name: Install Netlify CLI
         run: pnpm add netlify-cli
       - name: Deploy to Netlify
         id: netlify-deploy
-        uses: netlify/actions/cli@master
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: 7840347a-1605-469f-878f-bc76c7333db4
-        with:
-          args: deploy --dir=.vitepress/dist --prod
+        run: netlify deploy --dir=.vitepress/dist --prod
       - name: Audit URL(s) using Lighthouse
-        uses: treosh/lighthouse-ci-action@v11.4.0
+        uses: treosh/lighthouse-ci-action@v11
         env:
           LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.sha }}
         with:

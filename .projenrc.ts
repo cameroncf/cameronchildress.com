@@ -137,6 +137,7 @@ const deployJob = (options: DeployJobOptions): Job => {
     steps: [
       {
         name: "Setup pnpm",
+        uses: "pnpm/action-setup@v3",
         with: {
           version: "9",
         },
@@ -145,6 +146,18 @@ const deployJob = (options: DeployJobOptions): Job => {
         name: "Install Netlify CLI",
         run: "pnpm add netlify-cli",
       },
+      {
+        name: "Deploy to Netlify",
+        id: "netlify-deploy",
+        run: isPr
+          ? `netlify deploy --dir=${NETLIFY_DEPLOY_DIR}`
+          : `netlify deploy --dir=${NETLIFY_DEPLOY_DIR} --prod`,
+        env: {
+          NETLIFY_AUTH_TOKEN,
+          NETLIFY_SITE_ID,
+        },
+      },
+      /*
       {
         name: "Deploy to Netlify",
         id: "netlify-deploy",
@@ -159,9 +172,10 @@ const deployJob = (options: DeployJobOptions): Job => {
           NETLIFY_SITE_ID,
         },
       },
+      */
       {
         name: "Audit URL(s) using Lighthouse",
-        uses: "treosh/lighthouse-ci-action@v11.4.0",
+        uses: "treosh/lighthouse-ci-action@v11",
         with: {
           urls: isPr
             ? ["${{ steps.netlify-deploy.outputs.NETLIFY_URL }}"].join("\n")
