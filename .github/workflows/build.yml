@@ -24,7 +24,7 @@ jobs:
         with:
           version: "9"
       - name: Install dependencies
-        run: pnpm i --no-frozen-lockfile
+        run: pnpm i --frozen-lockfile
       - name: build
         run: npx projen build
       - name: Find mutations
@@ -46,34 +46,96 @@ jobs:
           echo "::error::Files were changed during build (see build log). If this was triggered from a fork, you will need to update your branch."
           cat .repo.patch
           exit 1
-  self-mutation:
+      - name: Backup artifact permissions
+        run: cd .vitepress/dist && getfacl -R . > permissions-backup.acl
+        continue-on-error: true
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifact
+          path: .vitepress/dist
+          overwrite: true
+  pr-preview-deploy:
+    name: deploy-preview
     needs: build
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-    if: always() && needs.build.outputs.self_mutation_happened && !(github.event.pull_request.head.repo.full_name != github.repository)
+      contents: read
+    concurrency: deploy-preview
+    env:
+      CI: "true"
+    if: startsWith( github.ref, 'refs/pull/' )
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
-          ref: ${{ github.event.pull_request.head.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-      - name: Download patch
+      - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
-          name: .repo.patch
-          path: ${{ runner.temp }}
-      - name: Apply patch
-        run: '[ -s ${{ runner.temp }}/.repo.patch ] && git apply ${{ runner.temp }}/.repo.patch || echo "Empty patch. Skipping."'
-      - name: Set git identity
-        run: |-
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-      - name: Push changes
+          name: build-artifact
+          path: .vitepress/dist
+      - name: Restore build artifact permissions
+        run: cd .vitepress/dist && setfacl --restore=permissions-backup.acl
+        continue-on-error: true
+      - name: Deploy to Netlify
+        id: netlify-deploy
+        uses: netlify/actions/cli@master
         env:
-          PULL_REQUEST_REF: ${{ github.event.pull_request.head.ref }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: 7840347a-1605-469f-878f-bc76c7333db4
+        with:
+          args: deploy --dir=.vitepress/dist
+      - name: Audit URLs using Lighthouse
+        uses: treosh/lighthouse-ci-action@v10
+        env:
+          LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.sha }}
+        with:
+          urls: ${{ steps.deploy-preview.outputs.NETLIFY_URL }}
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          runs: 3
+      - name: Publish Summary
+        env:
+          NETLIFY_URL: ${{ steps.netlify-deploy.outputs.NETLIFY_URL }}
         run: |-
-          git add .
-          git commit -s -m "chore: self mutation"
-          git push origin HEAD:$PULL_REQUEST_REF
+          echo "### Deploy Complete! :rocket:" >> $GITHUB_STEP_SUMMARY
+          echo "- Netlify URL: $NETLIFY_URL" >> $GITHUB_STEP_SUMMARY
+  production-deploy:
+    name: deploy-main
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    concurrency: deploy-main
+    env:
+      CI: "true"
+    if: startsWith( github.ref, 'refs/heads/main
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifact
+          path: .vitepress/dist
+      - name: Restore build artifact permissions
+        run: cd .vitepress/dist && setfacl --restore=permissions-backup.acl
+        continue-on-error: true
+      - name: Deploy to Netlify
+        id: netlify-deploy
+        uses: netlify/actions/cli@master
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: 7840347a-1605-469f-878f-bc76c7333db4
+        with:
+          args: deploy --dir=.vitepress/dist --prod
+      - name: Audit URLs using Lighthouse
+        uses: treosh/lighthouse-ci-action@v10
+        env:
+          LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.sha }}
+        with:
+          urls: ${{ steps.deploy-preview.outputs.NETLIFY_URL }}
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          runs: 3
+      - name: Publish Summary
+        env:
+          NETLIFY_URL: ${{ steps.netlify-deploy.outputs.NETLIFY_LIVE_URL }}
+        run: |-
+          echo "### Deploy Complete! :rocket:" >> $GITHUB_STEP_SUMMARY
+          echo "- Netlify URL: $NETLIFY_URL" >> $GITHUB_STEP_SUMMARY
