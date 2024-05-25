@@ -46,4 +46,6 @@ junit.xml
 /lib
 /dist/
 !/.eslintrc.json
+!/.vscode/settings.json
+!/.vscode/extensions.json
 !/.projenrc.ts
