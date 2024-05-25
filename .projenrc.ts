@@ -1,4 +1,5 @@
 import { typescript } from "projen";
+import { NodePackageManager } from "projen/lib/javascript";
 import {
   VsCode,
   VsCodeRecommendedExtensions,
@@ -11,6 +12,11 @@ const project = new typescript.TypeScriptAppProject({
   projenrcTs: true,
 
   prettier: true,
+
+  packageManager: NodePackageManager.PNPM,
+  pnpmVersion: "9",
+
+  devDeps: ["vitepress"],
 
   // deps: [],                /* Runtime dependencies of this module. */
   // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
