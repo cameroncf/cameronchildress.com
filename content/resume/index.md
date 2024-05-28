@@ -42,7 +42,7 @@ A seasoned leader with a passion for all things software and technology. I've he
 ### Sumo Consulting
 _Apr 2022 - present_
 
-As the **President** of [Sumo Consulting](https://www.sumoc.com), I helps clients solve unique busienss problems through software.
+As the **President** of [Sumo Consulting](https://www.sumoc.com), I help clients solve unique busienss problems through software. Past and current clients include PGA of America, Oregon Health and Science University, Baylor University, NATO, Turner Sports, Thermo Fisher Scientific, and many more...
 
 
 ### Invitrogen
