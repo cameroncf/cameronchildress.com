@@ -6,7 +6,7 @@ outline: deep
 678-637-5072  
 cameronc@sumoc.com  
 
-A seasoned leader with a passion for all things software and technology. I've helped dozens of companies large and small with an incrediby wide variety of software projects over the past 30 years. From planning though development, delivery, and long term support - I've seen and done it all. I apply my rich history of experience to every new project I take on. 
+A seasoned leader with a passion for all things software and technology. I've helped dozens of companies, large and small, with an incredibly wide variety of software projects over the past 30 years. From planning through development, delivery, and long term support - I've seen and done it all. I apply my rich history of experience to every new project I take on. 
 
 ## Skills & Tech Stack
 
@@ -40,36 +40,36 @@ A seasoned leader with a passion for all things software and technology. I've he
 ## Work Experience
 
 ### Sumo Consulting
-_Apr 2022 - present_
+_Apr 2022 - Present_
 
-As the **President** of [Sumo Consulting](https://www.sumoc.com), I help clients solve unique busienss problems through software. Past and current clients include PGA of America, Oregon Health and Science University, Baylor University, NATO, Turner Sports, Thermo Fisher Scientific, and many more...
+As the **President** of [Sumo Consulting](https://www.sumoc.com), I help clients solve unique business problems through software. Past and current clients include PGA of America, Oregon Health and Science University, Baylor University, NATO, Turner Sports, Thermo Fisher Scientific, and many more...
 
 
 ### Invitrogen
 _Nov 2005 - Mar 2007_
 
-As **Web Systems Architect**, I provided technical leadership to e-Business Group. _Invitrogen has gone through several mergers and aquisitions and is now part of Thermo Fisher Scientific._
+As **Web Systems Architect**, I provided technical leadership to e-Business Group. _Invitrogen has gone through several mergers and acquisitions and is now part of Thermo Fisher Scientific._
 
-- Supported Invitrogen's B2B Punchout and Ariba based procurement channel.
+- Supported Invitrogen's B2B Punchout and Ariba-based procurement channel.
 - Technical leader and software architect for external B2B customer interfaces.
-- Hands on development with ERP and CRM system integrations projects.
+- Hands-on development with ERP and CRM system integrations projects.
 
 ### Global Cash Card
 _May 2004 - Nov 2005_
 
 Served as ***Senior Systems Architect*** for GCC's stored value card management system.
 
-- Architected and supported systems capable of using cards for payroll, giftcards, and other cash management via payment card. 
+- Architected and supported systems capable of using cards for payroll, gift cards, and other cash management via payment card. 
 - Developed core systems to securely interact with nationwide banking networks in support of various card transactions.
 
 ### Turner Sports Interactive
 _Jan 2003 - Aug 2004_
 
-Served as **Technical Lead, PGA.com** supporting Turner Sports Interactive's aquisition of broadcast and website rights for the PGA of America. 
+Served as **Technical Lead, PGA.com** supporting Turner Sports Interactive's acquisition of broadcast and website rights for the PGA of America. 
 
 - Led the rebuild and relaunch of PGA.com in 2003.
 - Managed development and deployment of entirely rebuilt infrastructure and code into Turner's existing IT organization in **three months**. 
-- Developed architecture that scaled to peak hourly pageview traffic in excess of 8 figures with minimal downtime.
+- Developed architecture that scaled to peak hourly page view traffic in excess of 8 figures with minimal downtime.
 
 
 ### Biolab Inc
@@ -77,8 +77,8 @@ _Apr 2002 - Jan 2003_
 
 Was **ERP System Integration Consultant** at Biolab, a company well known for making swimming pool chemicals.
 
-- Assisted existing software development team in rewriting parts of it's ERP (Enterprise Resource Planning) System. 
-- Reverse engineered and rewrote significant portions of shipping and distributions systems to work within existing ERP ecosystem. 
+- Assisted existing software development team in rewriting parts of its ERP (Enterprise Resource Planning) System. 
+- Reverse engineered and rewrote significant portions of shipping and distribution systems to work within existing ERP ecosystem. 
 - Led various performance and process improvements within IT organization.
 
 ### elliptIQ
