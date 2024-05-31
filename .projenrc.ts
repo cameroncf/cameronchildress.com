@@ -118,21 +118,6 @@ const project = new typescript.TypeScriptAppProject({
    * artifacts are in the `content/.vitepress/dist`
    */
   artifactsDirectory: NETLIFY_DEPLOY_DIR,
-
-  /**
-   * This one like tiny line of code does a lot by causes a release CI workflow
-   * to be generated for GitHub actions.
-   *
-   * By default out of the box, the Projen release workflow:
-   *
-   * - Triggered by push to "main" branch (or defaultReleaseBranch above)
-   * - Bumps the package version in package.json.
-   * - Creates a new release in GitHub.
-   *
-   * You can optionally add a step to push a package to NPM, but that is not
-   * required for this project.
-   */
-  release: true,
 });
 
 /*******************************************************************************
@@ -256,6 +241,19 @@ interface NetlifyDeployOptions {
   lighthouse?: boolean;
 }
 
+interface NetlifyCliOptions {
+  alias?: string;
+  prod?: boolean;
+}
+
+interface NetlifyJobOptions {
+  jobName: string;
+  jobFilter: string;
+  cliOptions: NetlifyCliOptions;
+}
+// ? `netlify deploy --dir=${NETLIFY_DEPLOY_DIR} --alias=${prAlias} --json`
+// : `netlify deploy --dir=${NETLIFY_DEPLOY_DIR} --prod`,
+
 class NetlifyDeploy extends Component {
   constructor(
     scope: typescript.TypeScriptAppProject,
@@ -263,22 +261,21 @@ class NetlifyDeploy extends Component {
   ) {
     super(scope);
 
-    if (project.release) {
-    }
+    const makeJob = (jobOptions: NetlifyJobOptions): Job => {
+      const cliArgs = Object.entries(jobOptions.cliOptions)
+        .map((item) => {
+          return `--${item[0]}=${item[1]}`;
+        })
+        .join(" ");
 
-    const addJob = (
-      jobName: string,
-      jobFilter: string,
-      needs: Array<string>,
-    ): Job => {
       /**
        * Build the deploy job
        */
       const job: Job = {
-        name: jobName,
-        concurrency: jobName,
-        if: jobFilter,
-        needs,
+        name: jobOptions.jobName,
+        concurrency: jobOptions.jobName,
+        if: jobOptions.jobFilter,
+        needs: ["build"],
         runsOn: ["ubuntu-latest"],
         env: {
           CI: "true",
@@ -308,14 +305,13 @@ class NetlifyDeploy extends Component {
             name: "Deploy to Netlify",
             id: "deploy-step",
             run: [
-              "DEPLOY_URL=$(netlify deploy --dir=$NETLIFY_DEPLOY_DIR --alias=$PREVIEW_ALIAS --json | jq -r '.deploy_url')",
+              `DEPLOY_URL=$(netlify deploy --dir=$NETLIFY_DEPLOY_DIR ${cliArgs} --json | jq -r '.deploy_url')`,
               `echo "DEPLOY_URL=$DEPLOY_URL" >> "$GITHUB_OUTPUT"`,
             ].join("\n"),
             env: {
               NETLIFY_DEPLOY_DIR: options.netlify.deployDir,
               NETLIFY_AUTH_TOKEN: options.netlify.authToken,
               NETLIFY_SITE_ID: options.netlify.siteId,
-              PREVIEW_ALIAS: "pr-${{ github.event.number }}",
             },
           },
           {
@@ -335,48 +331,36 @@ class NetlifyDeploy extends Component {
     };
 
     /**
-     * Add build job
+     * Add build jobs
      */
-    const buildJob = addJob(
-      "netlify-preview",
-      "startsWith( github.ref, 'refs/pull/' )",
-      ["build"],
-    );
-    project.buildWorkflow?.addPostBuildJob(buildJob.name!, buildJob);
-    /**
-     * Add lighthouse audit?
-     */
-    if (options.lighthouse) {
-      const lhRelease = new LightHouseAudit(scope, {
-        inputs: { jobName: buildJob.name!, outputName: "DEPLOY_URL" },
-      });
-      project.buildWorkflow?.addPostBuildJob(
-        lhRelease.job.name!,
-        lhRelease.job,
-      );
-    }
-
-    /**
-     * Add release job
-     */
-    if (project.release) {
-      const releaseJob = addJob(
-        "netlify-publish",
-        "startsWith( github.ref, 'refs/heads/main' )",
-        ["release"],
-      );
-      project.release.addJobs({ [releaseJob.name!]: releaseJob });
+    [
+      {
+        jobName: "netlify-preview",
+        jobFilter: "startsWith( github.ref, 'refs/pull/' )",
+        cliOptions: { alias: "pr-${{ github.event.number }}" },
+      },
+      {
+        jobName: "netlify-publish",
+        jobFilter: "startsWith( github.ref, 'refs/heads/main' )",
+        cliOptions: { prod: true },
+      },
+    ].forEach((o) => {
+      const deployJob = makeJob({ ...o });
+      project.buildWorkflow?.addPostBuildJob(deployJob.name!, deployJob);
 
       /**
        * Add lighthouse audit?
        */
       if (options.lighthouse) {
         const lhRelease = new LightHouseAudit(scope, {
-          inputs: { jobName: releaseJob.name!, outputName: "DEPLOY_URL" },
+          inputs: { jobName: deployJob.name!, outputName: "DEPLOY_URL" },
         });
-        project.release.addJobs({ [lhRelease.job.name!]: lhRelease.job });
+        project.buildWorkflow?.addPostBuildJob(
+          lhRelease.job.name!,
+          lhRelease.job,
+        );
       }
-    }
+    });
   }
 }
 
@@ -407,12 +391,14 @@ export class LightHouseAudit extends Component {
   ) {
     super(scope);
 
+    const jobName = `lh-${options.inputs.jobName}`;
+
     /**
      * Build lighthouse job
      */
     this.job = {
-      name: "lighthouse-audit",
-      concurrency: "lighthouse-audit",
+      name: jobName,
+      concurrency: jobName,
       needs: [options.inputs.jobName],
       runsOn: ["ubuntu-latest"],
       env: {

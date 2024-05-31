@@ -8,7 +8,9 @@ queue_rules:
       - -label~=(do-not-merge)
       - status-success=build
       - status-success=netlify-preview
-      - status-success=lighthouse-audit
+      - status-success=lh-netlify-preview
+      - status-success=netlify-publish
+      - status-success=lh-netlify-publish
 pull_request_rules:
   - name: Automatic merge on approval and successful build
     actions:
@@ -25,4 +27,6 @@ pull_request_rules:
       - -label~=(do-not-merge)
       - status-success=build
       - status-success=netlify-preview
-      - status-success=lighthouse-audit
+      - status-success=lh-netlify-preview
+      - status-success=netlify-publish
+      - status-success=lh-netlify-publish
