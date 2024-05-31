@@ -109,6 +109,21 @@ const project = new typescript.TypeScriptAppProject({
   },
 
   /**
+   * Defined the GitHub Action triggers for the project. In this case we want
+   * CI workflows to be triggered when:
+   *
+   * - A PR is opened
+   * - A manual workflow is triggered in GitHub's UI
+   * - When code is pushed to the main branch (a production deploy)
+   */
+
+  buildWorkflowTriggers: {
+    pullRequest: {},
+    workflowDispatch: {},
+    push: { branches: ["main"] },
+  },
+
+  /**
    * This is the directory where Projen expects to find build artifacts. This
    * directory value is used in generated GitHub Actions and other CI
    * configurations as the artifact directory that gets bundled up and saved to
@@ -251,8 +266,6 @@ interface NetlifyJobOptions {
   jobFilter: string;
   cliOptions: NetlifyCliOptions;
 }
-// ? `netlify deploy --dir=${NETLIFY_DEPLOY_DIR} --alias=${prAlias} --json`
-// : `netlify deploy --dir=${NETLIFY_DEPLOY_DIR} --prod`,
 
 class NetlifyDeploy extends Component {
   constructor(
