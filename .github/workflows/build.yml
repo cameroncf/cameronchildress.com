@@ -90,7 +90,7 @@ jobs:
         run: netlify deploy --dir=$NETLIFY_DEPLOY_DIR --alias=$PREVIEW_ALIAS --json
       - name: Publish Summary
         env:
-          NETLIFY_URL: ${{ steps.netlify-deploy.outputs.deploy_url; }}
+          NETLIFY_URL: ${{ steps.netlify-deploy.outputs.deploy_url }}
         run: |-
           echo "### Deploy Complete! :rocket:" >> $GITHUB_STEP_SUMMARY
           echo "- Netlify URL: $NETLIFY_URL" >> $GITHUB_STEP_SUMMARY
