@@ -118,21 +118,6 @@ const project = new typescript.TypeScriptAppProject({
    * artifacts are in the `content/.vitepress/dist`
    */
   artifactsDirectory: NETLIFY_DEPLOY_DIR,
-
-  /**
-   * This one like tiny line of code does a lot by causes a release CI workflow
-   * to be generated for GitHub actions.
-   *
-   * By default out of the box, the Projen release workflow:
-   *
-   * - Triggered by push to "main" branch (or defaultReleaseBranch above)
-   * - Bumps the package version in package.json.
-   * - Creates a new release in GitHub.
-   *
-   * You can optionally add a step to push a package to NPM, but that is not
-   * required for this project.
-   */
-  release: true,
 });
 
 /*******************************************************************************
