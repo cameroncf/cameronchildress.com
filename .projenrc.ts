@@ -1,5 +1,4 @@
 import { typescript } from "projen";
-import { Job, JobPermission } from "projen/lib/github/workflows-model";
 import { NodePackageManager } from "projen/lib/javascript";
 import { VsCode, VsCodeSettings } from "projen/lib/vscode";
 
@@ -33,6 +32,7 @@ const VITEPRESS_SITE_DIR = "content";
  *
  * This is not considered a secret.
  */
+// @ts-ignore
 const NETLIFY_SITE_ID = "7840347a-1605-469f-878f-bc76c7333db4";
 
 /**
@@ -40,6 +40,7 @@ const NETLIFY_SITE_ID = "7840347a-1605-469f-878f-bc76c7333db4";
  * GitHub Actions for our CI pipeline. The Netlify Auth Token is a secret that
  * you will need to create in your GitHub account and named as shown here.
  */
+// @ts-ignore
 const NETLIFY_AUTH_TOKEN = "${{ secrets.NETLIFY_AUTH_TOKEN }}";
 
 /**
@@ -127,11 +128,28 @@ const project = new typescript.TypeScriptAppProject({
    * - A manual workflow is triggered in GitHub's UI
    * - When code is pushed to the main branch (a production deploy)
    */
+  /*
   buildWorkflowTriggers: {
     pullRequest: {},
     workflowDispatch: {},
     push: { branches: ["main"] },
   },
+  */
+
+  /**
+   * This one like tiny line of code does a lot by causes a release CI workflow
+   * to be generated for GitHub actions.
+   *
+   * By default out of the box, the Projen release workflow:
+   *
+   * - Triggered by push to "main" branch (or defaultReleaseBranch above)
+   * - Bumps the package version in package.json.
+   * - Creates a new release in GitHub.
+   *
+   * You can optionally add a step to push a package to NPM, but that is not
+   * required for this project.
+   */
+  release: true,
 });
 
 /*******************************************************************************
@@ -247,15 +265,13 @@ project.compileTask.exec(`npx projen ${VITEPRESS_SITE_DIR}:build`);
  *
  ******************************************************************************/
 
+/*
 interface DeployJobOptions {
   isPr?: boolean;
   jobName?: string;
 }
 
 const deployJob = (options: DeployJobOptions): Job => {
-  /**
-   * Set Defaults
-   */
   const isPr = options.isPr ?? true;
   const jobName =
     options.jobName ?? options.isPr ? "deploy-preview" : "deploy-main";
@@ -301,18 +317,6 @@ const deployJob = (options: DeployJobOptions): Job => {
           NETLIFY_SITE_ID,
         },
       },
-      /*
-      {
-        name: "Audit URL(s) using Lighthouse",
-        uses: "treosh/lighthouse-ci-action@v11",
-        with: {
-          urls: [netlifyPreviewUrl].join("\n"),
-          uploadArtifacts: true,
-          temporaryPublicStorage: true,
-          runs: 3,
-        },
-      },
-      */
       {
         name: "Publish Summary",
         run: [
@@ -326,8 +330,10 @@ const deployJob = (options: DeployJobOptions): Job => {
     ],
   };
 };
+*/
 
 // add deploy jobs to the github script
+/*
 project.buildWorkflow?.addPostBuildJob(
   "pr-preview-deploy",
   deployJob({ isPr: true }),
@@ -336,6 +342,7 @@ project.buildWorkflow?.addPostBuildJob(
   "production-deploy",
   deployJob({ isPr: false }),
 );
+*/
 
 /**
  * Generate the project

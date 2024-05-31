@@ -4,6 +4,8 @@
 junit.xml
 /coverage/
 permissions-backup.acl
+/content/.vitepress/dist/changelog.md
+/content/.vitepress/dist/version.txt
 /.mergify.yml
 /.prettierignore
 /.prettierrc.json
