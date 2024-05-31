@@ -420,6 +420,8 @@ class PreviewRelease extends Component {
         },
         env: {
           NETLIFY_URL: "${{ steps.netlify-deploy.outputs.NETLIFY_URL }}",
+          // see: https://github.com/treosh/lighthouse-ci-action/issues/21
+          LHCI_BUILD_CONTEXT__CURRENT_HASH: "${{ github.sha }}",
         },
       },
     );
