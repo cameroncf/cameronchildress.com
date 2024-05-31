@@ -333,108 +333,149 @@ const deployJob = (options: DeployJobOptions): Job => {
 };
 */
 
-const commonReleaseOptions: Job = {
-  needs: ["build"],
-  runsOn: ["ubuntu-latest"],
-  env: {
-    CI: "true",
-  },
-  permissions: {
-    contents: JobPermission.READ,
-  },
-  steps: [
-    {
-      name: "Setup pnpm",
-      uses: "pnpm/action-setup@v3",
-      with: {
-        version: "9",
-      },
-    },
-    {
-      name: "Install Netlify CLI",
-      run: "pnpm add netlify-cli",
-    },
-  ],
-};
-
 interface NetlifyOptions {
   deployDir: string;
   authToken: string;
   siteId: string;
 }
 
-interface PreviewReleaseOptions {
+export enum NetlifyDeployType {
+  PREVIEW = "preview",
+  PRODUCTION = "production",
+}
+
+interface NetlifyDeployOptions {
+  releaseType: NetlifyDeployType;
   netlify: NetlifyOptions;
 }
 
-class PreviewRelease extends Component {
+class NetlifyDeploy extends Component {
   constructor(
     scope: typescript.TypeScriptAppProject,
-    options: PreviewReleaseOptions,
+    options: NetlifyDeployOptions,
   ) {
     super(scope);
 
-    const { netlify } = options;
-    const { deployDir, authToken, siteId } = netlify;
+    /**
+     * Determine args depending on if this is a PR Preview Release or a
+     * production release
+     */
+    const jobName =
+      options.releaseType === NetlifyDeployType.PREVIEW
+        ? "netlify-preview"
+        : "netlify-publish";
+    const jobFilter =
+      options.releaseType === NetlifyDeployType.PREVIEW
+        ? "startsWith( github.ref, 'refs/pull/' )"
+        : "startsWith( github.ref, 'refs/heads/main' )";
+    const needs =
+      options.releaseType === NetlifyDeployType.PREVIEW
+        ? ["build"]
+        : ["release"];
 
+    /**
+     * Build the release job
+     */
     const releaseJob: Job = {
-      ...commonReleaseOptions,
-      name: "preview-release",
-      concurrency: "preview-release",
-      if: `startsWith( github.ref, 'refs/pull/' )`,
+      name: jobName,
+      concurrency: jobName,
+      if: jobFilter,
+      needs,
+      runsOn: ["ubuntu-latest"],
+      env: {
+        CI: "true",
+      },
+      permissions: {
+        contents: JobPermission.READ,
+      },
+      steps: [
+        {
+          name: "Setup pnpm",
+          uses: "pnpm/action-setup@v3",
+          with: {
+            version: "9",
+          },
+        },
+        {
+          name: "Install Netlify CLI",
+          run: "pnpm add netlify-cli",
+        },
+        {
+          name: "Deploy to Netlify",
+          id: "deploy-step",
+          run: [
+            "DEPLOY_URL=$(netlify deploy --dir=$NETLIFY_DEPLOY_DIR --alias=$PREVIEW_ALIAS --json | jq -r '.deploy_url')",
+            `echo "DEPLOY_URL=$DEPLOY_URL" >> "$GITHUB_OUTPUT"`,
+          ].join("\n"),
+          env: {
+            NETLIFY_DEPLOY_DIR: options.netlify.deployDir,
+            NETLIFY_AUTH_TOKEN: options.netlify.authToken,
+            NETLIFY_SITE_ID: options.netlify.siteId,
+            PREVIEW_ALIAS: "pr-${{ github.event.number }}",
+          },
+        },
+        {
+          name: "Publish Summary",
+          run: [
+            `echo "### Deploy Complete! :rocket:" >> $GITHUB_STEP_SUMMARY`,
+            `echo "- Netlify Preview URL: $DEPLOY_URL" >> $GITHUB_STEP_SUMMARY`,
+          ].join("\n"),
+          env: {
+            NETLIFY_URL: "${{ steps.deploy-step.outputs.DEPLOY_URL }}",
+          },
+        },
+      ],
     };
 
-    releaseJob.steps.push(
-      {
-        name: "Deploy to Netlify",
-        id: "netlify-deploy",
-        run: [
-          "DEPLOY_URL=$(netlify deploy --dir=$NETLIFY_DEPLOY_DIR --alias=$PREVIEW_ALIAS --json | jq -r '.deploy_url')",
-          `echo "NETLIFY_URL=$DEPLOY_URL" >> "$GITHUB_OUTPUT"`,
-        ].join("\n"),
-        env: {
-          NETLIFY_DEPLOY_DIR: deployDir,
-          NETLIFY_AUTH_TOKEN: authToken,
-          NETLIFY_SITE_ID: siteId,
-          PREVIEW_ALIAS: "pr-${{ github.event.number }}",
-        },
+    /*
+    releaseJob.steps.push({
+      name: "Audit URL(s) using Lighthouse",
+      uses: "treosh/lighthouse-ci-action@v11",
+      with: {
+        urls: ["$NETLIFY_URL"].join("\n"),
+        uploadArtifacts: true,
+        temporaryPublicStorage: true,
+        runs: 3,
       },
-      {
-        name: "Publish Summary",
-        run: [
-          `echo "### Deploy Complete! :rocket:" >> $GITHUB_STEP_SUMMARY`,
-          `echo "- Netlify Preview URL: $NETLIFY_URL" >> $GITHUB_STEP_SUMMARY`,
-        ].join("\n"),
-        env: {
-          NETLIFY_URL: "${{ steps.netlify-deploy.outputs.NETLIFY_URL }}",
-        },
+      env: {
+        NETLIFY_URL: "${{ steps.netlify-deploy.outputs.NETLIFY_URL }}",
+        // see: https://github.com/treosh/lighthouse-ci-action/issues/21
+        LHCI_BUILD_CONTEXT__CURRENT_HASH: "${{ github.sha }}",
       },
-      {
-        name: "Audit URL(s) using Lighthouse",
-        uses: "treosh/lighthouse-ci-action@v11",
-        with: {
-          urls: ["$NETLIFY_URL"].join("\n"),
-          uploadArtifacts: true,
-          temporaryPublicStorage: true,
-          runs: 3,
-        },
-        env: {
-          NETLIFY_URL: "${{ steps.netlify-deploy.outputs.NETLIFY_URL }}",
-          // see: https://github.com/treosh/lighthouse-ci-action/issues/21
-          LHCI_BUILD_CONTEXT__CURRENT_HASH: "${{ github.sha }}",
-        },
-      },
-    );
+    });
+    */
 
-    project.buildWorkflow?.addPostBuildJob("preview-release", releaseJob);
+    /**
+     * Previews happen as part of build workflow, production releases are a
+     * part of the release workflow.
+     */
+    if (options.releaseType === NetlifyDeployType.PREVIEW) {
+      project.buildWorkflow?.addPostBuildJob(jobName, releaseJob);
+    } else {
+      project.release?.addJobs({ [jobName]: releaseJob });
+    }
   }
 }
 
 /**
- * Add a preview release job to the build workflow. This job will deploy a
+ * Add a preview deploy job to the build workflow. This job will deploy a
  * preview of the site to Netlify for each PR that is opened.
  */
-new PreviewRelease(project, {
+new NetlifyDeploy(project, {
+  releaseType: NetlifyDeployType.PREVIEW,
+  netlify: {
+    deployDir: NETLIFY_DEPLOY_DIR,
+    authToken: NETLIFY_AUTH_TOKEN,
+    siteId: NETLIFY_SITE_ID,
+  },
+});
+
+/**
+ * Add a production deploy job to the release workflow. This job will deploy
+ * the site to Netlify when PR is approved and code is pushed to the main branch.
+ */
+new NetlifyDeploy(project, {
+  releaseType: NetlifyDeployType.PRODUCTION,
   netlify: {
     deployDir: NETLIFY_DEPLOY_DIR,
     authToken: NETLIFY_AUTH_TOKEN,

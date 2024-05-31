@@ -80,3 +80,36 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_REF: ${{ github.sha }}
         run: errout=$(mktemp); gh release create $(cat content/.vitepress/dist/releasetag.txt) -R $GITHUB_REPOSITORY -F content/.vitepress/dist/changelog.md -t $(cat content/.vitepress/dist/releasetag.txt) --target $GITHUB_REF 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi
+  netlify-publish:
+    name: netlify-publish
+    needs: release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    concurrency: netlify-publish
+    env:
+      CI: "true"
+    if: startsWith( github.ref, 'refs/heads/main' )
+    steps:
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: "9"
+      - name: Install Netlify CLI
+        run: pnpm add netlify-cli
+      - name: Deploy to Netlify
+        id: deploy-step
+        env:
+          NETLIFY_DEPLOY_DIR: content/.vitepress/dist
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: 7840347a-1605-469f-878f-bc76c7333db4
+          PREVIEW_ALIAS: pr-${{ github.event.number }}
+        run: |-
+          DEPLOY_URL=$(netlify deploy --dir=$NETLIFY_DEPLOY_DIR --alias=$PREVIEW_ALIAS --json | jq -r '.deploy_url')
+          echo "DEPLOY_URL=$DEPLOY_URL" >> "$GITHUB_OUTPUT"
+      - name: Publish Summary
+        env:
+          NETLIFY_URL: ${{ steps.deploy-step.outputs.DEPLOY_URL }}
+        run: |-
+          echo "### Deploy Complete! :rocket:" >> $GITHUB_STEP_SUMMARY
+          echo "- Netlify Preview URL: $DEPLOY_URL" >> $GITHUB_STEP_SUMMARY

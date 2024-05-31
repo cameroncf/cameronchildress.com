@@ -55,13 +55,13 @@ jobs:
           name: build-artifact
           path: content/.vitepress/dist
           overwrite: true
-  preview-release:
-    name: preview-release
+  netlify-preview:
+    name: netlify-preview
     needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    concurrency: preview-release
+    concurrency: netlify-preview
     env:
       CI: "true"
     if: startsWith( github.ref, 'refs/pull/' )
@@ -81,7 +81,7 @@ jobs:
       - name: Install Netlify CLI
         run: pnpm add netlify-cli
       - name: Deploy to Netlify
-        id: netlify-deploy
+        id: deploy-step
         env:
           NETLIFY_DEPLOY_DIR: content/.vitepress/dist
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
@@ -89,20 +89,10 @@ jobs:
           PREVIEW_ALIAS: pr-${{ github.event.number }}
         run: |-
           DEPLOY_URL=$(netlify deploy --dir=$NETLIFY_DEPLOY_DIR --alias=$PREVIEW_ALIAS --json | jq -r '.deploy_url')
-          echo "NETLIFY_URL=$DEPLOY_URL" >> "$GITHUB_OUTPUT"
+          echo "DEPLOY_URL=$DEPLOY_URL" >> "$GITHUB_OUTPUT"
       - name: Publish Summary
         env:
-          NETLIFY_URL: ${{ steps.netlify-deploy.outputs.NETLIFY_URL }}
+          NETLIFY_URL: ${{ steps.deploy-step.outputs.DEPLOY_URL }}
         run: |-
           echo "### Deploy Complete! :rocket:" >> $GITHUB_STEP_SUMMARY
-          echo "- Netlify Preview URL: $NETLIFY_URL" >> $GITHUB_STEP_SUMMARY
-      - name: Audit URL(s) using Lighthouse
-        uses: treosh/lighthouse-ci-action@v11
-        env:
-          NETLIFY_URL: ${{ steps.netlify-deploy.outputs.NETLIFY_URL }}
-          LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.sha }}
-        with:
-          urls: $NETLIFY_URL
-          uploadArtifacts: true
-          temporaryPublicStorage: true
-          runs: 3
+          echo "- Netlify Preview URL: $DEPLOY_URL" >> $GITHUB_STEP_SUMMARY
