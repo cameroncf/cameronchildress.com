@@ -33,7 +33,6 @@ const VITEPRESS_SITE_DIR = "content";
  *
  * This is not considered a secret.
  */
-// @ts-ignore
 const NETLIFY_SITE_ID = "7840347a-1605-469f-878f-bc76c7333db4";
 
 /**
@@ -41,7 +40,6 @@ const NETLIFY_SITE_ID = "7840347a-1605-469f-878f-bc76c7333db4";
  * GitHub Actions for our CI pipeline. The Netlify Auth Token is a secret that
  * you will need to create in your GitHub account and named as shown here.
  */
-// @ts-ignore
 const NETLIFY_AUTH_TOKEN = "${{ secrets.NETLIFY_AUTH_TOKEN }}";
 
 /**
@@ -120,22 +118,6 @@ const project = new typescript.TypeScriptAppProject({
    * artifacts are in the `content/.vitepress/dist`
    */
   artifactsDirectory: NETLIFY_DEPLOY_DIR,
-
-  /**
-   * Defined the GitHub Action triggers for the project. In this case we want
-   * CI workflows to be triggered when:
-   *
-   * - A PR is opened
-   * - A manual workflow is triggered in GitHub's UI
-   * - When code is pushed to the main branch (a production deploy)
-   */
-  /*
-  buildWorkflowTriggers: {
-    pullRequest: {},
-    workflowDispatch: {},
-    push: { branches: ["main"] },
-  },
-  */
 
   /**
    * This one like tiny line of code does a lot by causes a release CI workflow
@@ -479,14 +461,6 @@ new NetlifyDeploy(project, {
   },
   lighthouse: true,
 });
-
-//project.buildWorkflow?.addPostBuildJob("preview-release", previewRelease());
-/*
-project.buildWorkflow?.addPostBuildJob(
-  "production-deploy",
-  deployJob({ isPr: false }),
-);
-*/
 
 /**
  * Generate the project
