@@ -87,10 +87,12 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: 7840347a-1605-469f-878f-bc76c7333db4
           PREVIEW_ALIAS: pr-${{ github.event.number }}
-        run: netlify deploy --dir=$NETLIFY_DEPLOY_DIR --alias=$PREVIEW_ALIAS --json
+        run: |-
+          DEPLOY_URL=$(netlify deploy --dir=$NETLIFY_DEPLOY_DIR --alias=$PREVIEW_ALIAS --json | jq -r '.deploy_url')
+          echo "DEPLOY_URL=DEPLOY_URL" >> "$GITHUB_OUTPUT"
       - name: Publish Summary
         env:
-          NETLIFY_URL: ${{ steps.netlify-deploy.outputs.deploy_url }}
+          NETLIFY_URL: ${{ steps.netlify-deploy.outputs.DEPLOY_URL }}
         run: |-
           echo "### Deploy Complete! :rocket:" >> $GITHUB_STEP_SUMMARY
           echo "- Netlify URL: $NETLIFY_URL" >> $GITHUB_STEP_SUMMARY

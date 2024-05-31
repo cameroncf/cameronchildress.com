@@ -372,7 +372,10 @@ class PreviewRelease extends Component {
       {
         name: "Deploy to Netlify",
         id: "netlify-deploy",
-        run: "netlify deploy --dir=$NETLIFY_DEPLOY_DIR --alias=$PREVIEW_ALIAS --json",
+        run: [
+          "DEPLOY_URL=$(netlify deploy --dir=$NETLIFY_DEPLOY_DIR --alias=$PREVIEW_ALIAS --json | jq -r '.deploy_url')",
+          `echo "DEPLOY_URL=DEPLOY_URL" >> "$GITHUB_OUTPUT"`,
+        ].join("\n"),
         env: {
           NETLIFY_DEPLOY_DIR,
           NETLIFY_AUTH_TOKEN,
@@ -387,7 +390,7 @@ class PreviewRelease extends Component {
           `echo "- Netlify URL: $NETLIFY_URL" >> $GITHUB_STEP_SUMMARY`,
         ].join("\n"),
         env: {
-          NETLIFY_URL: "${{ steps.netlify-deploy.outputs.deploy_url }}",
+          NETLIFY_URL: "${{ steps.netlify-deploy.outputs.DEPLOY_URL }}",
         },
       },
     );
