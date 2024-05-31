@@ -116,7 +116,6 @@ const project = new typescript.TypeScriptAppProject({
    * - A manual workflow is triggered in GitHub's UI
    * - When code is pushed to the main branch (a production deploy)
    */
-
   buildWorkflowTriggers: {
     pullRequest: {},
     workflowDispatch: {},
@@ -256,15 +255,10 @@ interface NetlifyDeployOptions {
   lighthouse?: boolean;
 }
 
-interface NetlifyCliOptions {
-  alias?: string;
-  prod?: boolean;
-}
-
 interface NetlifyJobOptions {
   jobName: string;
   jobFilter: string;
-  cliOptions: NetlifyCliOptions;
+  cliOptions: string;
 }
 
 class NetlifyDeploy extends Component {
@@ -275,12 +269,6 @@ class NetlifyDeploy extends Component {
     super(scope);
 
     const makeJob = (jobOptions: NetlifyJobOptions): Job => {
-      const cliArgs = Object.entries(jobOptions.cliOptions)
-        .map((item) => {
-          return `--${item[0]}=${item[1]}`;
-        })
-        .join(" ");
-
       /**
        * Build the deploy job
        */
@@ -318,7 +306,7 @@ class NetlifyDeploy extends Component {
             name: "Deploy to Netlify",
             id: "deploy-step",
             run: [
-              `DEPLOY_URL=$(netlify deploy --dir=$NETLIFY_DEPLOY_DIR ${cliArgs} --json | jq -r '.deploy_url')`,
+              `DEPLOY_URL=$(netlify deploy --dir=$NETLIFY_DEPLOY_DIR ${jobOptions.cliOptions} --json | jq -r '.deploy_url')`,
               `echo "DEPLOY_URL=$DEPLOY_URL" >> "$GITHUB_OUTPUT"`,
             ].join("\n"),
             env: {
@@ -350,12 +338,12 @@ class NetlifyDeploy extends Component {
       {
         jobName: "netlify-preview",
         jobFilter: "startsWith( github.ref, 'refs/pull/' )",
-        cliOptions: { alias: "pr-${{ github.event.number }}" },
+        cliOptions: "--alias=pr-${{ github.event.number }}",
       },
       {
         jobName: "netlify-publish",
         jobFilter: "startsWith( github.ref, 'refs/heads/main' )",
-        cliOptions: { prod: true },
+        cliOptions: "--prod",
       },
     ].forEach((o) => {
       const deployJob = makeJob({ ...o });
