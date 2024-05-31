@@ -7,8 +7,8 @@ queue_rules:
       - "#approved-reviews-by>=1"
       - -label~=(do-not-merge)
       - status-success=build
-      - status-success=pr-preview-deploy
-      - status-success=production-deploy
+      - status-success=netlify-preview
+      - status-success=lighthouse-audit
 pull_request_rules:
   - name: Automatic merge on approval and successful build
     actions:
@@ -24,5 +24,5 @@ pull_request_rules:
       - "#approved-reviews-by>=1"
       - -label~=(do-not-merge)
       - status-success=build
-      - status-success=pr-preview-deploy
-      - status-success=production-deploy
+      - status-success=netlify-preview
+      - status-success=lighthouse-audit
