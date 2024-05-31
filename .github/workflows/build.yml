@@ -46,3 +46,51 @@ jobs:
           echo "::error::Files were changed during build (see build log). If this was triggered from a fork, you will need to update your branch."
           cat .repo.patch
           exit 1
+      - name: Backup artifact permissions
+        run: cd content/.vitepress/dist && getfacl -R . > permissions-backup.acl
+        continue-on-error: true
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifact
+          path: content/.vitepress/dist
+          overwrite: true
+  preview-release:
+    name: preview-release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    concurrency: preview-release
+    env:
+      CI: "true"
+    if: startsWith( github.ref, 'refs/pull/' )
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifact
+          path: content/.vitepress/dist
+      - name: Restore build artifact permissions
+        run: cd content/.vitepress/dist && setfacl --restore=permissions-backup.acl
+        continue-on-error: true
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: "9"
+      - name: Install Netlify CLI
+        run: pnpm add netlify-cli
+      - name: Deploy to Netlify
+        id: netlify-deploy
+        env:
+          NETLIFY_DEPLOY_DIR: content/.vitepress/dist
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: 7840347a-1605-469f-878f-bc76c7333db4
+          PREVIEW_ALIAS: pr-${{ github.event.number }}
+        run: netlify deploy --dir=$NETLIFY_DEPLOY_DIR --alias=$PREVIEW_ALIAS --json
+      - name: Publish Summary
+        env:
+          NETLIFY_URL: ${{ steps.netlify-deploy.outputs.NETLIFY_URL }}
+        run: |-
+          echo "### Deploy Complete! :rocket:" >> $GITHUB_STEP_SUMMARY
+          echo "- Netlify URL: $NETLIFY_URL" >> $GITHUB_STEP_SUMMARY

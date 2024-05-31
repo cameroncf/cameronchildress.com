@@ -1,4 +1,5 @@
-import { typescript } from "projen";
+import { Component, typescript } from "projen";
+import { Job, JobPermission } from "projen/lib/github/workflows-model";
 import { NodePackageManager } from "projen/lib/javascript";
 import { VsCode, VsCodeSettings } from "projen/lib/vscode";
 
@@ -332,12 +333,78 @@ const deployJob = (options: DeployJobOptions): Job => {
 };
 */
 
-// add deploy jobs to the github script
+const commonReleaseOptions: Job = {
+  needs: ["build"],
+  runsOn: ["ubuntu-latest"],
+  env: {
+    CI: "true",
+  },
+  permissions: {
+    contents: JobPermission.READ,
+  },
+  steps: [
+    {
+      name: "Setup pnpm",
+      uses: "pnpm/action-setup@v3",
+      with: {
+        version: "9",
+      },
+    },
+    {
+      name: "Install Netlify CLI",
+      run: "pnpm add netlify-cli",
+    },
+  ],
+};
+
+class PreviewRelease extends Component {
+  constructor(scope: typescript.TypeScriptAppProject) {
+    super(scope);
+
+    const releaseJob: Job = {
+      ...commonReleaseOptions,
+      name: "preview-release",
+      concurrency: "preview-release",
+      if: `startsWith( github.ref, 'refs/pull/' )`,
+    };
+
+    releaseJob.steps.push(
+      {
+        name: "Deploy to Netlify",
+        id: "netlify-deploy",
+        run: "netlify deploy --dir=$NETLIFY_DEPLOY_DIR --alias=$PREVIEW_ALIAS --json",
+        env: {
+          NETLIFY_DEPLOY_DIR,
+          NETLIFY_AUTH_TOKEN,
+          NETLIFY_SITE_ID,
+          PREVIEW_ALIAS: "pr-${{ github.event.number }}",
+        },
+      },
+      {
+        name: "Publish Summary",
+        run: [
+          `echo "### Deploy Complete! :rocket:" >> $GITHUB_STEP_SUMMARY`,
+          `echo "- Netlify URL: $NETLIFY_URL" >> $GITHUB_STEP_SUMMARY`,
+        ].join("\n"),
+        env: {
+          NETLIFY_URL: "${{ steps.netlify-deploy.outputs.NETLIFY_URL }}",
+        },
+      },
+    );
+
+    project.buildWorkflow?.addPostBuildJob("preview-release", releaseJob);
+  }
+}
+
+/**
+ * Add a preview release job to the build workflow. This job will deploy a
+ * preview of the site to Netlify for each PR that is opened.
+ */
+
+new PreviewRelease(project);
+
+//project.buildWorkflow?.addPostBuildJob("preview-release", previewRelease());
 /*
-project.buildWorkflow?.addPostBuildJob(
-  "pr-preview-deploy",
-  deployJob({ isPr: true }),
-);
 project.buildWorkflow?.addPostBuildJob(
   "production-deploy",
   deployJob({ isPr: false }),
