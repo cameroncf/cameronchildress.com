@@ -87,6 +87,8 @@ jobs:
     permissions:
       contents: read
     concurrency: netlify-publish
+    outputs:
+      DEPLOY_URL: ${{ steps.deploy-step.outputs.DEPLOY_URL }}
     env:
       CI: "true"
     if: startsWith( github.ref, 'refs/heads/main' )
@@ -113,10 +115,19 @@ jobs:
         run: |-
           echo "### Deploy Complete! :rocket:" >> $GITHUB_STEP_SUMMARY
           echo "- Netlify Preview URL: $DEPLOY_URL" >> $GITHUB_STEP_SUMMARY
+  lighthouse-audit:
+    name: lighthouse-audit
+    needs: netlify-publish
+    runs-on: ubuntu-latest
+    permissions: {}
+    concurrency: lighthouse-audit
+    env:
+      CI: "true"
+    steps:
       - name: Audit URL(s) using Lighthouse
         uses: treosh/lighthouse-ci-action@v11
         env:
-          DEPLOY_URL: ${{ steps.deploy-step.outputs.DEPLOY_URL }}
+          DEPLOY_URL: ${{ needs.netlify-publish.outputs.DEPLOY_URL }}
           LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.sha }}
         with:
           urls: $DEPLOY_URL

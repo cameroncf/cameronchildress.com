@@ -62,6 +62,8 @@ jobs:
     permissions:
       contents: read
     concurrency: netlify-preview
+    outputs:
+      DEPLOY_URL: ${{ steps.deploy-step.outputs.DEPLOY_URL }}
     env:
       CI: "true"
     if: startsWith( github.ref, 'refs/pull/' )
@@ -96,10 +98,28 @@ jobs:
         run: |-
           echo "### Deploy Complete! :rocket:" >> $GITHUB_STEP_SUMMARY
           echo "- Netlify Preview URL: $DEPLOY_URL" >> $GITHUB_STEP_SUMMARY
+  lighthouse-audit:
+    name: lighthouse-audit
+    needs: netlify-preview
+    runs-on: ubuntu-latest
+    permissions: {}
+    concurrency: lighthouse-audit
+    env:
+      CI: "true"
+    if: "! needs.build.outputs.self_mutation_happened"
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifact
+          path: content/.vitepress/dist
+      - name: Restore build artifact permissions
+        run: cd content/.vitepress/dist && setfacl --restore=permissions-backup.acl
+        continue-on-error: true
       - name: Audit URL(s) using Lighthouse
         uses: treosh/lighthouse-ci-action@v11
         env:
-          DEPLOY_URL: ${{ steps.deploy-step.outputs.DEPLOY_URL }}
+          DEPLOY_URL: ${{ needs.netlify-preview.outputs.DEPLOY_URL }}
           LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.sha }}
         with:
           urls: $DEPLOY_URL
