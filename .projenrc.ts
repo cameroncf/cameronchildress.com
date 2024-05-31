@@ -1,5 +1,5 @@
 import { Component, typescript } from "projen";
-import { Job, JobPermission } from "projen/lib/github/workflows-model";
+import { Job, JobPermission, JobStep } from "projen/lib/github/workflows-model";
 import { NodePackageManager } from "projen/lib/javascript";
 import { VsCode, VsCodeSettings } from "projen/lib/vscode";
 
@@ -347,6 +347,7 @@ export enum NetlifyDeployType {
 interface NetlifyDeployOptions {
   releaseType: NetlifyDeployType;
   netlify: NetlifyOptions;
+  postDeploySteps?: Array<JobStep>;
 }
 
 class NetlifyDeploy extends Component {
@@ -421,30 +422,12 @@ class NetlifyDeploy extends Component {
             `echo "- Netlify Preview URL: $DEPLOY_URL" >> $GITHUB_STEP_SUMMARY`,
           ].join("\n"),
           env: {
-            NETLIFY_URL: "${{ steps.deploy-step.outputs.DEPLOY_URL }}",
+            DEPLOY_URL: "${{ steps.deploy-step.outputs.DEPLOY_URL }}",
           },
         },
+        ...(options.postDeploySteps ?? []),
       ],
     };
-
-    /*
-    releaseJob.steps.push({
-      name: "Audit URL(s) using Lighthouse",
-      uses: "treosh/lighthouse-ci-action@v11",
-      with: {
-        urls: ["$NETLIFY_URL"].join("\n"),
-        uploadArtifacts: true,
-        temporaryPublicStorage: true,
-        runs: 3,
-      },
-      env: {
-        NETLIFY_URL: "${{ steps.netlify-deploy.outputs.NETLIFY_URL }}",
-        // see: https://github.com/treosh/lighthouse-ci-action/issues/21
-        LHCI_BUILD_CONTEXT__CURRENT_HASH: "${{ github.sha }}",
-      },
-    });
-    */
-
     /**
      * Previews happen as part of build workflow, production releases are a
      * part of the release workflow.
@@ -458,6 +441,25 @@ class NetlifyDeploy extends Component {
 }
 
 /**
+ * Add a post-deploy step to run lighthouse audits on the deployed site.
+ */
+const lightHouseStep: JobStep = {
+  name: "Audit URL(s) using Lighthouse",
+  uses: "treosh/lighthouse-ci-action@v11",
+  with: {
+    urls: ["$DEPLOY_URL"].join("\n"),
+    uploadArtifacts: true,
+    temporaryPublicStorage: true,
+    runs: 3,
+  },
+  env: {
+    DEPLOY_URL: "${{ steps.deploy-step.outputs.DEPLOY_URL }}",
+    // see: https://github.com/treosh/lighthouse-ci-action/issues/21
+    LHCI_BUILD_CONTEXT__CURRENT_HASH: "${{ github.sha }}",
+  },
+};
+
+/**
  * Add a preview deploy job to the build workflow. This job will deploy a
  * preview of the site to Netlify for each PR that is opened.
  */
@@ -468,6 +470,7 @@ new NetlifyDeploy(project, {
     authToken: NETLIFY_AUTH_TOKEN,
     siteId: NETLIFY_SITE_ID,
   },
+  postDeploySteps: [lightHouseStep],
 });
 
 /**
@@ -481,6 +484,7 @@ new NetlifyDeploy(project, {
     authToken: NETLIFY_AUTH_TOKEN,
     siteId: NETLIFY_SITE_ID,
   },
+  postDeploySteps: [lightHouseStep],
 });
 
 //project.buildWorkflow?.addPostBuildJob("preview-release", previewRelease());

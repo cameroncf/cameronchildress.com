@@ -109,7 +109,17 @@ jobs:
           echo "DEPLOY_URL=$DEPLOY_URL" >> "$GITHUB_OUTPUT"
       - name: Publish Summary
         env:
-          NETLIFY_URL: ${{ steps.deploy-step.outputs.DEPLOY_URL }}
+          DEPLOY_URL: ${{ steps.deploy-step.outputs.DEPLOY_URL }}
         run: |-
           echo "### Deploy Complete! :rocket:" >> $GITHUB_STEP_SUMMARY
           echo "- Netlify Preview URL: $DEPLOY_URL" >> $GITHUB_STEP_SUMMARY
+      - name: Audit URL(s) using Lighthouse
+        uses: treosh/lighthouse-ci-action@v11
+        env:
+          DEPLOY_URL: ${{ steps.deploy-step.outputs.DEPLOY_URL }}
+          LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.sha }}
+        with:
+          urls: $DEPLOY_URL
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          runs: 3
