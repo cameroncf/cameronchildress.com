@@ -88,9 +88,8 @@ jobs:
           NETLIFY_DEPLOY_DIR: content/.vitepress/dist
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: 7840347a-1605-469f-878f-bc76c7333db4
-          PREVIEW_ALIAS: pr-${{ github.event.number }}
         run: |-
-          DEPLOY_URL=$(netlify deploy --dir=$NETLIFY_DEPLOY_DIR --alias=$PREVIEW_ALIAS --json | jq -r '.deploy_url')
+          DEPLOY_URL=$(netlify deploy --dir=$NETLIFY_DEPLOY_DIR --alias=pr-${{ github.event.number }} --json | jq -r '.deploy_url')
           echo "DEPLOY_URL=$DEPLOY_URL" >> "$GITHUB_OUTPUT"
       - name: Publish Summary
         env:
@@ -98,12 +97,12 @@ jobs:
         run: |-
           echo "### Deploy Complete! :rocket:" >> $GITHUB_STEP_SUMMARY
           echo "- Netlify Preview URL: $DEPLOY_URL" >> $GITHUB_STEP_SUMMARY
-  lighthouse-audit:
-    name: lighthouse-audit
+  lh-netlify-preview:
+    name: lh-netlify-preview
     needs: netlify-preview
     runs-on: ubuntu-latest
     permissions: {}
-    concurrency: lighthouse-audit
+    concurrency: lh-netlify-preview
     env:
       CI: "true"
     if: "! needs.build.outputs.self_mutation_happened"
@@ -120,6 +119,76 @@ jobs:
         uses: treosh/lighthouse-ci-action@v11
         env:
           DEPLOY_URL: ${{ needs.netlify-preview.outputs.DEPLOY_URL }}
+          LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.sha }}
+        with:
+          urls: $DEPLOY_URL
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          runs: 3
+  netlify-publish:
+    name: netlify-publish
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    concurrency: netlify-publish
+    outputs:
+      DEPLOY_URL: ${{ steps.deploy-step.outputs.DEPLOY_URL }}
+    env:
+      CI: "true"
+    if: startsWith( github.ref, 'refs/heads/main' )
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifact
+          path: content/.vitepress/dist
+      - name: Restore build artifact permissions
+        run: cd content/.vitepress/dist && setfacl --restore=permissions-backup.acl
+        continue-on-error: true
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: "9"
+      - name: Install Netlify CLI
+        run: pnpm add netlify-cli
+      - name: Deploy to Netlify
+        id: deploy-step
+        env:
+          NETLIFY_DEPLOY_DIR: content/.vitepress/dist
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: 7840347a-1605-469f-878f-bc76c7333db4
+        run: |-
+          DEPLOY_URL=$(netlify deploy --dir=$NETLIFY_DEPLOY_DIR --prod=true --json | jq -r '.deploy_url')
+          echo "DEPLOY_URL=$DEPLOY_URL" >> "$GITHUB_OUTPUT"
+      - name: Publish Summary
+        env:
+          DEPLOY_URL: ${{ steps.deploy-step.outputs.DEPLOY_URL }}
+        run: |-
+          echo "### Deploy Complete! :rocket:" >> $GITHUB_STEP_SUMMARY
+          echo "- Netlify Preview URL: $DEPLOY_URL" >> $GITHUB_STEP_SUMMARY
+  lh-netlify-publish:
+    name: lh-netlify-publish
+    needs: netlify-publish
+    runs-on: ubuntu-latest
+    permissions: {}
+    concurrency: lh-netlify-publish
+    env:
+      CI: "true"
+    if: "! needs.build.outputs.self_mutation_happened"
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifact
+          path: content/.vitepress/dist
+      - name: Restore build artifact permissions
+        run: cd content/.vitepress/dist && setfacl --restore=permissions-backup.acl
+        continue-on-error: true
+      - name: Audit URL(s) using Lighthouse
+        uses: treosh/lighthouse-ci-action@v11
+        env:
+          DEPLOY_URL: ${{ needs.netlify-publish.outputs.DEPLOY_URL }}
           LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.sha }}
         with:
           urls: $DEPLOY_URL
