@@ -387,7 +387,7 @@ class PreviewRelease extends Component {
           `echo "- Netlify URL: $NETLIFY_URL" >> $GITHUB_STEP_SUMMARY`,
         ].join("\n"),
         env: {
-          NETLIFY_URL: "${{ steps.netlify-deploy.outputs.NETLIFY_URL }}",
+          NETLIFY_URL: "${{ steps.netlify-deploy.outputs.deploy_url }}",
         },
       },
     );
