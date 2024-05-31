@@ -357,9 +357,25 @@ const commonReleaseOptions: Job = {
   ],
 };
 
+interface NetlifyOptions {
+  deployDir: string;
+  authToken: string;
+  siteId: string;
+}
+
+interface PreviewReleaseOptions {
+  netlify: NetlifyOptions;
+}
+
 class PreviewRelease extends Component {
-  constructor(scope: typescript.TypeScriptAppProject) {
+  constructor(
+    scope: typescript.TypeScriptAppProject,
+    options: PreviewReleaseOptions,
+  ) {
     super(scope);
+
+    const { netlify } = options;
+    const { deployDir, authToken, siteId } = netlify;
 
     const releaseJob: Job = {
       ...commonReleaseOptions,
@@ -377,9 +393,9 @@ class PreviewRelease extends Component {
           `echo "NETLIFY_URL=$DEPLOY_URL" >> "$GITHUB_OUTPUT"`,
         ].join("\n"),
         env: {
-          NETLIFY_DEPLOY_DIR,
-          NETLIFY_AUTH_TOKEN,
-          NETLIFY_SITE_ID,
+          NETLIFY_DEPLOY_DIR: deployDir,
+          NETLIFY_AUTH_TOKEN: authToken,
+          NETLIFY_SITE_ID: siteId,
           PREVIEW_ALIAS: "pr-${{ github.event.number }}",
         },
       },
@@ -387,8 +403,21 @@ class PreviewRelease extends Component {
         name: "Publish Summary",
         run: [
           `echo "### Deploy Complete! :rocket:" >> $GITHUB_STEP_SUMMARY`,
-          `echo "- Netlify URL: $NETLIFY_URL" >> $GITHUB_STEP_SUMMARY`,
+          `echo "- Netlify Preview URL: $NETLIFY_URL" >> $GITHUB_STEP_SUMMARY`,
         ].join("\n"),
+        env: {
+          NETLIFY_URL: "${{ steps.netlify-deploy.outputs.NETLIFY_URL }}",
+        },
+      },
+      {
+        name: "Audit URL(s) using Lighthouse",
+        uses: "treosh/lighthouse-ci-action@v11",
+        with: {
+          urls: ["$NETLIFY_URL"].join("\n"),
+          uploadArtifacts: true,
+          temporaryPublicStorage: true,
+          runs: 3,
+        },
         env: {
           NETLIFY_URL: "${{ steps.netlify-deploy.outputs.NETLIFY_URL }}",
         },
@@ -403,8 +432,13 @@ class PreviewRelease extends Component {
  * Add a preview release job to the build workflow. This job will deploy a
  * preview of the site to Netlify for each PR that is opened.
  */
-
-new PreviewRelease(project);
+new PreviewRelease(project, {
+  netlify: {
+    deployDir: NETLIFY_DEPLOY_DIR,
+    authToken: NETLIFY_AUTH_TOKEN,
+    siteId: NETLIFY_SITE_ID,
+  },
+});
 
 //project.buildWorkflow?.addPostBuildJob("preview-release", previewRelease());
 /*

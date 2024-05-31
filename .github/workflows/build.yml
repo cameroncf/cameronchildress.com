@@ -95,4 +95,13 @@ jobs:
           NETLIFY_URL: ${{ steps.netlify-deploy.outputs.NETLIFY_URL }}
         run: |-
           echo "### Deploy Complete! :rocket:" >> $GITHUB_STEP_SUMMARY
-          echo "- Netlify URL: $NETLIFY_URL" >> $GITHUB_STEP_SUMMARY
+          echo "- Netlify Preview URL: $NETLIFY_URL" >> $GITHUB_STEP_SUMMARY
+      - name: Audit URL(s) using Lighthouse
+        uses: treosh/lighthouse-ci-action@v11
+        env:
+          NETLIFY_URL: ${{ steps.netlify-deploy.outputs.NETLIFY_URL }}
+        with:
+          urls: $NETLIFY_URL
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          runs: 3
