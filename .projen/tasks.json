@@ -61,9 +61,6 @@
       "description": "Only compile",
       "steps": [
         {
-          "exec": "tsc --build"
-        },
-        {
           "exec": "npx projen content:build"
         }
       ]

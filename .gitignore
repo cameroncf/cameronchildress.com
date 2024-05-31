@@ -50,5 +50,4 @@ junit.xml
 content/.vitepress/dist
 content/.vitepress/cache
 !/.vscode/settings.json
-!/.vscode/extensions.json
 !/.projenrc.ts
