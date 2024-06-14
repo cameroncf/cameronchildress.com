@@ -1,7 +1,7 @@
+import { VitepressProject } from "@sumoc/breeze";
 import { Component, typescript } from "projen";
 import { Job, JobPermission } from "projen/lib/github/workflows-model";
 import { NodePackageManager } from "projen/lib/javascript";
-import { VsCode, VsCodeSettings } from "projen/lib/vscode";
 
 /*******************************************************************************
  *
@@ -59,7 +59,7 @@ const NETLIFY_DEPLOY_DIR = `${VITEPRESS_SITE_DIR}/.vitepress/dist`;
  *
  ******************************************************************************/
 
-const project = new typescript.TypeScriptAppProject({
+const project = new VitepressProject({
   /**
    * The default branch that production deploys will come from. Historically
    * this was master but a more modern option is main. Projen requires this to
@@ -132,6 +132,11 @@ const project = new typescript.TypeScriptAppProject({
    * artifacts are in the `content/.vitepress/dist`
    */
   artifactsDirectory: NETLIFY_DEPLOY_DIR,
+
+  /**
+   * Add breeze
+   */
+  devDeps: ["@sumoc/breeze"],
 });
 
 /*******************************************************************************
@@ -150,27 +155,30 @@ const project = new typescript.TypeScriptAppProject({
  * specify a version here because we'll be using the auto-update workflow
  * features of Projen to keep packages all up to date.
  */
-project.addDevDeps("vitepress");
+//project.addDevDeps("vitepress");
 
 /**
  * When you install vitepress using `vitepress init`, you're told to exclude
  * these two folders in your gitignore. Since we're using Projen we add them
  * here and Projen takes case of the rest.
  */
+/*
 project.gitignore.exclude(
   `${VITEPRESS_SITE_DIR}/.vitepress/dist`,
   `${VITEPRESS_SITE_DIR}/.vitepress/cache`,
 );
-
+*/
 /**
  * Add the typical 3 VitePress tasks, prefixed with the folder name where our
  * site content is located.
  */
+/*
 ["dev", "build", "preview"].forEach((task) => {
   project
     .addTask(`${VITEPRESS_SITE_DIR}:${task}`)
     .exec(`vitepress ${task} ${VITEPRESS_SITE_DIR}`);
 });
+*/
 
 /*******************************************************************************
  *
@@ -187,7 +195,7 @@ project.gitignore.exclude(
  * Projen includes a VSCode component that does most of the heavy listing. We
  * access it here.
  */
-const vscode = new VsCode(project);
+//const vscode = new VsCode(project);
 
 /**
  * Add som basic configuration settings to the VS Code settings file:
@@ -197,24 +205,26 @@ const vscode = new VsCode(project);
  * - Highlight active bracket pairs
  * - Add rulers at 80 and 120 characters
  */
+/*
 const vsSettings = new VsCodeSettings(vscode);
 vsSettings.addSetting("editor.tabSize", 2);
 vsSettings.addSetting("editor.bracketPairColorization.enabled", true);
 vsSettings.addSetting("editor.guides.bracketPairs", "active");
 vsSettings.addSetting("editor.rulers", [80, 120]);
-
+*/
 /**
  * Add some ESLint specific settings to the VS Code settings file. Here we
  * set the ESLint code actions to run on save and also make sure we're only
  * linting typescript files to speed up eslint. Without this specificity, eslint
  * would lint all files in the project and feel super sluggish.
  */
+/*
 vsSettings.addSetting(
   "editor.codeActionsOnSave",
   { "source.fixAll.eslint": "explicit" },
   "typescript",
 );
-
+*/
 /*******************************************************************************
  *
  * Build Workflow

@@ -1,6 +1,10 @@
 {
   "dependencies": [
     {
+      "name": "@sumoc/breeze",
+      "type": "build"
+    },
+    {
       "name": "@types/jest",
       "type": "build"
     },
@@ -76,6 +80,10 @@
     },
     {
       "name": "vitepress",
+      "type": "build"
+    },
+    {
+      "name": "vue",
       "type": "build"
     }
   ],

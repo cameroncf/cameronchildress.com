@@ -47,7 +47,7 @@ junit.xml
 /lib
 /dist/
 !/.eslintrc.json
+!/.vscode/settings.json
 content/.vitepress/dist
 content/.vitepress/cache
-!/.vscode/settings.json
 !/.projenrc.ts
