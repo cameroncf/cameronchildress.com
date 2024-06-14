@@ -1,7 +1,6 @@
 import { VitepressProject } from "@sumoc/breeze";
 import { Component, typescript } from "projen";
 import { Job, JobPermission } from "projen/lib/github/workflows-model";
-import { NodePackageManager } from "projen/lib/javascript";
 
 /*******************************************************************************
  *
@@ -78,18 +77,6 @@ const project = new VitepressProject({
    * Typescript.
    */
   projenrcTs: true,
-
-  /**
-   * Enable Prettier for code formatting. This keeps our code tight and
-   * consistent.
-   */
-  prettier: true,
-
-  /**
-   * Use PNPM instead of the default of Yarn. This is a personal preference.
-   */
-  packageManager: NodePackageManager.PNPM,
-  pnpmVersion: "9",
 
   /**
    *
