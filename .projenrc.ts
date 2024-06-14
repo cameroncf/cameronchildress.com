@@ -123,7 +123,14 @@ const project = new VitepressProject({
   /**
    * Add breeze
    */
-  devDeps: ["@sumoc/breeze"],
+  devDeps: ["@sumoc/breeze", "vitepress-sidebar"],
+
+  tsconfig: {
+    compilerOptions: {
+      rootDir: undefined,
+    },
+    include: ["content/.vitepress/**/*.ts", "content/.vitepress/**/*.mts"],
+  },
 });
 
 /*******************************************************************************
