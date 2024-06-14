@@ -15,19 +15,19 @@ importers:
         specifier: ^29.5.12
         version: 29.5.12
       '@types/node':
-        specifier: ^18.19.34
+        specifier: ^18
         version: 18.19.34
       '@typescript-eslint/eslint-plugin':
-        specifier: ^7.13.0
+        specifier: ^7
         version: 7.13.0(@typescript-eslint/parser@7.13.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5)
       '@typescript-eslint/parser':
-        specifier: ^7.13.0
+        specifier: ^7
         version: 7.13.0(eslint@8.57.0)(typescript@5.4.5)
       constructs:
-        specifier: ^10.3.0
+        specifier: ^10.0.0
         version: 10.3.0
       eslint:
-        specifier: ^8.57.0
+        specifier: ^8
         version: 8.57.0
       eslint-config-prettier:
         specifier: ^9.1.0
@@ -45,7 +45,7 @@ importers:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@18.19.34)(ts-node@10.9.2(@types/node@18.19.34)(typescript@5.4.5))
       jest-junit:
-        specifier: ^15.0.0
+        specifier: ^15
         version: 15.0.0
       prettier:
         specifier: ^3.3.2
