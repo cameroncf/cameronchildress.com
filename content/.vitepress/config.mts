@@ -6,7 +6,6 @@ const config = defineConfig({
   title: "Cameron Childress",
   description: "My Personal Site",
   themeConfig: {
-    
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: "Home", link: "/" },
@@ -19,7 +18,10 @@ const config = defineConfig({
         documentRootPath: "content",
         scanStartPath: "blog",
         resolvePath: "/blog/",
-        useTitleFromFileHeading: true,
+        useTitleFromFrontmatter: true,
+        useFolderTitleFromIndexFile: true,
+        useFolderLinkFromIndexFile: true,
+        sortMenusByFrontmatterDate: true,
       },
     ]),
 
