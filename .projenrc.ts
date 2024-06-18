@@ -79,6 +79,12 @@ const project = new VitepressProject({
   projenrcTs: true,
 
   /**
+   * Kill the license for now. Probably will add one once content and code can
+   * be done separately.
+   */
+  licensed: false,
+
+  /**
    *
    * Projen generates a lot of configuration files for you. This is great but
    * to have deterministic builds, your don't want any of those generated files

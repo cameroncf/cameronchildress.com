@@ -44,7 +44,7 @@
     "vue": "^3.4.29"
   },
   "pnpm": {},
-  "license": "Apache-2.0",
+  "license": "UNLICENSED",
   "publishConfig": {
     "access": "public"
   },
