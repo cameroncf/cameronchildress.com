@@ -3,27 +3,33 @@ import VitePressSidebar from "vitepress-sidebar";
 
 // https://vitepress.dev/reference/site-config
 const config = defineConfig({
+
   title: "Cameron Childress",
   description: "My Personal Site",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: "Home", link: "/" },
-      /*{ text: "Blog", link: "/blog" },*/
-      { text: "Resume", link: "/resume" },
+      { text: "Blog", link: "/posts/" },
+      { text: "Resume", link: "/resume/" },
     ],
 
     sidebar: VitePressSidebar.generateSidebar([
       {
         documentRootPath: "content",
-        scanStartPath: "blog",
-        resolvePath: "/blog/",
+        scanStartPath: "posts",
+        resolvePath: "/posts/",
         useTitleFromFrontmatter: true,
         useFolderTitleFromIndexFile: true,
         useFolderLinkFromIndexFile: true,
         sortMenusByFrontmatterDate: true,
       },
     ]),
+
+    footer: {
+      /* message: 'Built with VitePress', */
+      copyright: 'Copyright © 2023-Present Cameron Childress'
+    },
 
     socialLinks: [
       {
