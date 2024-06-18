@@ -1,6 +1,7 @@
 {
     "type": "module",
     "devDependencies": {
+        "vite": "^5.3.1",
         "vitepress": "^1.2.3",
         "vitepress-sidebar": "^1.23.2"
     },
