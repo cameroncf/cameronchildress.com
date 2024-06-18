@@ -6,3 +6,4 @@ node_modules/
 !/.projen/files.json
 content/.vitepress/cache
 content/.vitepress/dist
+!/package.json
