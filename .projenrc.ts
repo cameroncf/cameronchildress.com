@@ -383,6 +383,10 @@ project.synth();
  * Testing vitepress as it's own folder in isolation.
  */
 
-const website = new VitepressProjectTwo({ name: "website", outdir: "website" });
+const website = new VitepressProjectTwo({
+  name: "website",
+  outdir: "website",
+  defaultReleaseBranch: "main",
+});
 
 website.synth();

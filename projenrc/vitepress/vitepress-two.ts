@@ -1,4 +1,8 @@
-import { Project, ProjectOptions } from "projen";
+import {
+  NodePackageManager,
+  NodeProject,
+  NodeProjectOptions,
+} from "projen/lib/javascript";
 
 /**
  * An interface for all template generators for VitePress.
@@ -48,7 +52,7 @@ export interface ScaffoldOptions {
 /**
  * Options to use when when creating the VitePress site.
  */
-export interface VitepressProjectOptionsTwo extends ProjectOptions {
+export interface VitepressProjectOptionsTwo extends NodeProjectOptions {
   /**
    * The directory where the content for the VitePress project will be stored.
    *
@@ -71,7 +75,7 @@ export interface VitepressProjectOptionsTwo extends ProjectOptions {
   readonly vitepressVersion?: string;
 }
 
-export class VitepressProjectTwo extends Project {
+export class VitepressProjectTwo extends NodeProject {
   readonly contentDirectory: string;
   readonly artifactsDirectory: string;
   readonly cacheDirectory: string;
@@ -79,33 +83,25 @@ export class VitepressProjectTwo extends Project {
 
   constructor(options: VitepressProjectOptionsTwo) {
     super({
-      /**
-       * Passthough all default options for typescript projects.
-       */
-      // ...defaultTypescriptProjectOptions,
+      packageManager: NodePackageManager.PNPM,
+      pnpmVersion: "9",
+      prettier: true,
+      licensed: false,
+      jest: false,
+      mergify: false,
+      package: false,
 
-      /**
-       * Passthrough all options to the TypeScriptAppProject constructor.
-       * This allows overriding of any of the defaultTypescriptProjectOptions
-       * if needed.
-       */
+      // passthrough options
       ...options,
     });
 
     /**
      * Add the package file for the project.
      */
-
-    /**
-     * Add vitepress as a dependency. If a version is supplied, use it.
-     * Otherwise we'll allow the package manager find the newest version.
-     */
-    /*
     const postfix = options.vitepressVersion
       ? `@${options.vitepressVersion}`
       : "";
     this.addDevDeps(`vitepress${postfix}`);
-    */
 
     /**
      * Set defaults, as needed.
@@ -126,6 +122,10 @@ export class VitepressProjectTwo extends Project {
        */
       ...options.scaffoldOptions,
     };
+
+    /***************************************************************************
+     * Package File (package.json)
+     **************************************************************************/
 
     /**
      * Workspace file for PNPM, if needed
@@ -151,13 +151,11 @@ export class VitepressProjectTwo extends Project {
      * Add the typical 3 VitePress tasks, prefixed with the folder name where our
      * site content is located. We'll generate those in the package.json here.
      */
-    /*
     ["dev", "build", "preview"].forEach((task) => {
       this.addTask(`${this.contentDirectory}:${task}`).exec(
         `vitepress ${task} ${this.contentDirectory}`,
       );
     });
-    */
 
     /**
      * By default, projen runs `tsc --build` as part of it's compile step. We don't
