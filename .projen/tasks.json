@@ -30,7 +30,12 @@
     },
     "default": {
       "name": "default",
-      "description": "Synthesize project files"
+      "description": "Synthesize project files",
+      "steps": [
+        {
+          "exec": "npx vite-node .projenrc.ts"
+        }
+      ]
     },
     "eject": {
       "name": "eject",
