@@ -83,6 +83,10 @@
       "type": "build"
     },
     {
+      "name": "vitepress-sidebar",
+      "type": "build"
+    },
+    {
       "name": "vue",
       "type": "build"
     }

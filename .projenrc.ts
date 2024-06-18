@@ -1,7 +1,6 @@
 import { VitepressProject } from "@sumoc/breeze";
 import { Component, typescript } from "projen";
 import { Job, JobPermission } from "projen/lib/github/workflows-model";
-import { NodePackageManager } from "projen/lib/javascript";
 
 /*******************************************************************************
  *
@@ -80,18 +79,6 @@ const project = new VitepressProject({
   projenrcTs: true,
 
   /**
-   * Enable Prettier for code formatting. This keeps our code tight and
-   * consistent.
-   */
-  prettier: true,
-
-  /**
-   * Use PNPM instead of the default of Yarn. This is a personal preference.
-   */
-  packageManager: NodePackageManager.PNPM,
-  pnpmVersion: "9",
-
-  /**
    *
    * Projen generates a lot of configuration files for you. This is great but
    * to have deterministic builds, your don't want any of those generated files
@@ -136,7 +123,14 @@ const project = new VitepressProject({
   /**
    * Add breeze
    */
-  devDeps: ["@sumoc/breeze"],
+  devDeps: ["@sumoc/breeze", "vitepress-sidebar"],
+
+  tsconfig: {
+    compilerOptions: {
+      rootDir: undefined,
+    },
+    include: ["content/.vitepress/**/*.ts", "content/.vitepress/**/*.mts"],
+  },
 });
 
 /*******************************************************************************

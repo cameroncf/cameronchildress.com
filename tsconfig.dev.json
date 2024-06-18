@@ -28,6 +28,8 @@
   "include": [
     "src/**/*.ts",
     "test/**/*.ts",
+    "content/.vitepress/**/*.ts",
+    "content/.vitepress/**/*.mts",
     ".projenrc.ts",
     "projenrc/**/*.ts"
   ],
