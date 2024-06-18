@@ -1,6 +1,7 @@
 import { Component, typescript } from "projen";
 import { Job, JobPermission } from "projen/lib/github/workflows-model";
 import { VitepressProject } from "./projenrc";
+import { VitepressProjectTwo } from "./projenrc/vitepress/vitepress-two";
 
 /*******************************************************************************
  *
@@ -377,3 +378,11 @@ new NetlifyDeploy(project, {
  * Generate the project
  */
 project.synth();
+
+/**
+ * Testing vitepress as it's own folder in isolation.
+ */
+
+const website = new VitepressProjectTwo({ name: "website", outdir: "website" });
+
+website.synth();

@@ -4,3 +4,5 @@ node_modules/
 !/.projen/tasks.json
 !/.projen/deps.json
 !/.projen/files.json
+content/.vitepress/dist
+content/.vitepress/cache
