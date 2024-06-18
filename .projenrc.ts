@@ -19,6 +19,7 @@ new JsonFile(project, "package.json", {
       "vite-node": "^1.6.0",
       vitepress: "^1.2.3",
       "vitepress-sidebar": "^1.23.2",
+      vue: "^3.4.29",
     },
     scripts: {
       "docs:dev": "vitepress dev content",

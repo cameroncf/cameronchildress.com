@@ -6,6 +6,7 @@ const config = defineConfig({
 
   title: "Cameron Childress",
   description: "My Personal Site",
+  cleanUrls: true,
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
