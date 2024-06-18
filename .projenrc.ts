@@ -1,6 +1,6 @@
-import { VitepressProject } from "@sumoc/breeze";
 import { Component, typescript } from "projen";
 import { Job, JobPermission } from "projen/lib/github/workflows-model";
+import { VitepressProject } from "./projenrc";
 
 /*******************************************************************************
  *
