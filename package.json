@@ -1,11 +1,12 @@
 {
-  "devDependencies": {
-    "vitepress": "^1.2.3",
-    "vitepress-sidebar": "^1.23.2"
-  },
-  "scripts": {
-    "docs:dev": "vitepress dev content",
-    "docs:build": "vitepress build content",
-    "docs:preview": "vitepress preview content"
-  }
+    "type": "module",
+    "devDependencies": {
+        "vitepress": "^1.2.3",
+        "vitepress-sidebar": "^1.23.2"
+    },
+    "scripts": {
+        "docs:dev": "vitepress dev content",
+        "docs:build": "vitepress build content",
+        "docs:preview": "vitepress preview content"
+    }
 }
