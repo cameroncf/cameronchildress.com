@@ -9,7 +9,7 @@ const config = defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: "Home", link: "/" },
-      { text: "Blog", link: "/blog" },
+      /*{ text: "Blog", link: "/blog" },*/
       { text: "Resume", link: "/resume" },
     ],
 
@@ -48,9 +48,11 @@ const config = defineConfig({
     ],
   },
 
+  /*
   sitemap: {
     hostname: "https://www.cameronchildress.com",
   },
+  */
 });
 
 export default config;
