@@ -1,5 +1,6 @@
 import { JsonFile, Project, ProjectOptions } from "projen";
 import { VsCodeConfig } from "../vscode/vscode-config";
+import { PROJEN_RC_FILE } from "../common";
 
 export interface ViteProjectOptions
   extends Omit<
@@ -38,7 +39,7 @@ export class ViteProject extends Project {
      * If this is the root project, configure the default task to run using vite-node
      */
     if (!options.parent) {
-      this.defaultTask?.exec(["npx", "vite-node", ".projenrc.ts"].join(" "));
+      this.defaultTask?.exec(["npx", "vite-node", PROJEN_RC_FILE].join(" "));
     }
 
     new VsCodeConfig(this, { typescript: true });
@@ -46,7 +47,7 @@ export class ViteProject extends Project {
     // build package.json
     new JsonFile(this, "package2.json", {
       obj: {
-        name: "cameronchildress.com",
+        name: this.name,
         version: "0.0.0",
         type: "module",
         devDependencies: {
