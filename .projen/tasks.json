@@ -33,7 +33,7 @@
       "description": "Synthesize project files",
       "steps": [
         {
-          "exec": "npx vite-node .projenrc.ts"
+          "exec": "pnpm vite-node .projenrc.ts"
         }
       ]
     },

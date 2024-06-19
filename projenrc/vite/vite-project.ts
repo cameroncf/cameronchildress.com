@@ -39,7 +39,7 @@ export class ViteProject extends Project {
      * If this is the root project, configure the default task to run using vite-node
      */
     if (!options.parent) {
-      this.defaultTask?.exec(["npx", "vite-node", PROJEN_RC_FILE].join(" "));
+      this.defaultTask?.exec(["pnpm", "vite-node", PROJEN_RC_FILE].join(" "));
     }
 
     new VsCodeConfig(this, { typescript: true });
