@@ -1,9 +1,10 @@
-import { JsonFile, Project } from "projen";
+import { JsonFile } from "projen";
+import { ViteProject } from "./projenrc/vite-project";
 
-const project = new Project({ name: "cameronchildress.com" });
+const project = new ViteProject({ name: "cameronchildress.com" });
 
-// make vite-node the default for executing the projen entry point
-project.defaultTask?.exec("npx vite-node .projenrc.ts");
+
+
 
 project.addGitIgnore("content/.vitepress/cache");
 project.addGitIgnore("content/.vitepress/dist");
