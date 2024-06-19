@@ -4,6 +4,8 @@ node_modules/
 !/.projen/tasks.json
 !/.projen/deps.json
 !/.projen/files.json
+!/.vscode/settings.json
+!/package2.json
 content/.vitepress/cache
 content/.vitepress/dist
 !/package.json

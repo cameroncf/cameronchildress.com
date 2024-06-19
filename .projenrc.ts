@@ -1,9 +1,7 @@
 import { JsonFile } from "projen";
-import { ViteProject } from "./projenrc/vite-project";
+import { ViteProject } from "./projenrc/vite/vite-project";
 
 const project = new ViteProject({ name: "cameronchildress.com" });
-
-
 
 
 project.addGitIgnore("content/.vitepress/cache");
