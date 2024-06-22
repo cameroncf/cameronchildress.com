@@ -9,9 +9,9 @@
     "inlineSourceMap": true,
     "inlineSources": true,
     "lib": [
-      "es2019"
+      "esnext"
     ],
-    "module": "CommonJS",
+    "module": "esnext",
     "noEmitOnError": false,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
@@ -24,12 +24,17 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "stripInternal": true,
-    "target": "ES2019"
+    "target": "esnext",
+    "moduleResolution": "bundler",
+    "skipLibCheck": true
   },
   "include": [
     "src/**/*.ts",
-    "content/.vitepress/**/*.ts",
-    "content/.vitepress/**/*.mts"
+    "vite.config.ts",
+    ".projenrc.ts",
+    "projenrc/**/*.ts"
   ],
-  "exclude": []
+  "exclude": [
+    "node_modules"
+  ]
 }

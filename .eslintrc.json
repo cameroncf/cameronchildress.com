@@ -7,13 +7,14 @@
   "root": true,
   "plugins": [
     "@typescript-eslint",
-    "import"
+    "import",
+    "eslint-plugin-require-node-import-prefix"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 2018,
     "sourceType": "module",
-    "project": "./tsconfig.dev.json"
+    "project": "./tsconfig.json"
   },
   "extends": [
     "plugin:import/typescript",
@@ -29,7 +30,7 @@
     "import/resolver": {
       "node": {},
       "typescript": {
-        "project": "./tsconfig.dev.json",
+        "project": "./tsconfig.json",
         "alwaysTryTypes": true
       }
     }
@@ -39,9 +40,7 @@
     "*.d.ts",
     "node_modules/",
     "*.generated.ts",
-    "coverage",
-    "!.projenrc.ts",
-    "!projenrc/**/*.ts"
+    "coverage"
   ],
   "rules": {
     "@typescript-eslint/no-require-imports": [
@@ -50,12 +49,7 @@
     "import/no-extraneous-dependencies": [
       "error",
       {
-        "devDependencies": [
-          "**/test/**",
-          "**/build-tools/**",
-          ".projenrc.ts",
-          "projenrc/**/*.ts"
-        ],
+        "devDependencies": [],
         "optionalDependencies": false,
         "peerDependencies": true
       }
@@ -124,15 +118,17 @@
           "method"
         ]
       }
-    ]
+    ],
+    "require-node-import-prefix/no-empty-import-prefix": "error"
   },
   "overrides": [
     {
       "files": [
-        ".projenrc.ts"
+        "**/*.spec.ts",
+        "**/*.spec.tsx",
+        "vite.config.ts"
       ],
       "rules": {
-        "@typescript-eslint/no-require-imports": "off",
         "import/no-extraneous-dependencies": "off"
       }
     }
