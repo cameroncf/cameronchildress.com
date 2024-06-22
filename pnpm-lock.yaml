@@ -46,8 +46,8 @@ importers:
         specifier: ^3.3.2
         version: 3.3.2
       projen:
-        specifier: ^0.82.6
-        version: 0.82.6(constructs@10.3.0)
+        specifier: ^0.82.8
+        version: 0.82.8(constructs@10.3.0)
       typescript:
         specifier: ^5.5.2
         version: 5.5.2
@@ -1389,8 +1389,8 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
 
-  projen@0.82.6:
-    resolution: {integrity: sha512-odAYFpNvR57BAYF5gLWq4d53edcsdvyJ8YjbX/0MDLLuS99gnHvQzGIj0ZeB13ahkrFv5dW+EanpcUKg5LA/Aw==}
+  projen@0.82.8:
+    resolution: {integrity: sha512-/YpYZf4g0/pck2tr34a4gpOveCV1xbCfdDT+H4Xq8qQzF0IbcDVsoV1kZXPcyzVWUyqHFT2/ORUeocV+Hka8tQ==}
     engines: {node: '>= 16.0.0'}
     hasBin: true
     peerDependencies:
@@ -2050,7 +2050,7 @@ snapshots:
     dependencies:
       '@jsii/spec': 1.100.0
       eslint-plugin-require-node-import-prefix: 0.0.2
-      projen: 0.82.6(constructs@10.3.0)
+      projen: 0.82.8(constructs@10.3.0)
       type-fest: 4.20.1
     transitivePeerDependencies:
       - constructs
@@ -3161,7 +3161,7 @@ snapshots:
 
   prettier@3.3.2: {}
 
-  projen@0.82.6(constructs@10.3.0):
+  projen@0.82.8(constructs@10.3.0):
     dependencies:
       constructs: 10.3.0
 
