@@ -36,7 +36,7 @@
     "vite-node": "^1.6.0",
     "vitepress": "^1.2.3",
     "vitepress-sidebar": "^1.23.2",
-    "vue": "^3.4.29"
+    "vue": "^3.4.30"
   },
   "dependencies": {
     "eslint-plugin-require-node-import-prefix": "0.0.2"
