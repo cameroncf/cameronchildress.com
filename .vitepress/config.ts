@@ -3,7 +3,7 @@ import VitePressSidebar from "vitepress-sidebar";
 
 // https://vitepress.dev/reference/site-config
 const config = defineConfig({
-
+srcDir: "src",
   title: "Cameron Childress",
   description: "My Personal Site",
   cleanUrls: true,
@@ -17,7 +17,7 @@ const config = defineConfig({
 
     sidebar: VitePressSidebar.generateSidebar([
       {
-        documentRootPath: "content",
+        documentRootPath: "src",
         scanStartPath: "posts",
         resolvePath: "/posts/",
         useTitleFromFrontmatter: true,

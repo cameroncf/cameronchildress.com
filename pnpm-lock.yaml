@@ -13,8 +13,8 @@ importers:
         version: 0.0.2
     devDependencies:
       '@sumoc/breeze':
-        specifier: ^0.0.25
-        version: 0.0.25(constructs@10.3.0)
+        specifier: ^0.0.29
+        version: 0.0.29(constructs@10.3.0)
       '@types/node':
         specifier: ^20
         version: 20.14.8
@@ -452,8 +452,8 @@ packages:
   '@shikijs/transformers@1.9.0':
     resolution: {integrity: sha512-wo8dNbZtFtVhKtw8BnXIT/FDTGMwEdWcQSIRa78ou14JGkMYxSCBN942W5+IRUifP5BwVUWgkXBYX/M3FUFkeg==}
 
-  '@sumoc/breeze@0.0.25':
-    resolution: {integrity: sha512-AJjOYaJmXjB9OR/KOMHRSZ5A3m0WFRCfa5br2L6uJmaRRiE71amaiCfDoW2R9g7e2XcyJjbzf1VTbnpo5noT4w==}
+  '@sumoc/breeze@0.0.29':
+    resolution: {integrity: sha512-HRkVLoWZ86RSDmr8U4Yyh70WF43mPXc9a9iTDmHFY1P7gy7vEIv2CmcECAY/Au4LIp8RTQ6163KTPls7Ct4Itw==}
     engines: {node: '>= 20.15.0'}
 
   '@types/estree@1.0.5':
@@ -2052,7 +2052,7 @@ snapshots:
     dependencies:
       shiki: 1.9.0
 
-  '@sumoc/breeze@0.0.25(constructs@10.3.0)':
+  '@sumoc/breeze@0.0.29(constructs@10.3.0)':
     dependencies:
       '@jsii/spec': 1.100.0
       eslint-plugin-require-node-import-prefix: 0.0.2

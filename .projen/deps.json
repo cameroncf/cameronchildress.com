@@ -2,7 +2,7 @@
   "dependencies": [
     {
       "name": "@sumoc/breeze",
-      "version": "^0.0.25",
+      "version": "^0.0.29",
       "type": "build"
     },
     {
