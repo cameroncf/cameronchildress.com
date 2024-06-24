@@ -1,31 +1,29 @@
-import { JsonFile } from "projen";
-import { ViteProject } from "./projenrc/vite/vite-project";
 
-const project = new ViteProject({ name: "cameronchildress.com" });
+import { NetlifyDeploy, VitepressProject } from "@sumoc/breeze";
 
+/**
+ * The Netlify Site ID is a unique identifier for your site. You can find this
+ * value in the Netlify dashboard for your site and replace it with your own
+ * Site ID.
+ *
+ * This is not considered a secret.
+ */
+const NETLIFY_SITE_ID = "7840347a-1605-469f-878f-bc76c7333db4";
 
-project.addGitIgnore("content/.vitepress/cache");
-project.addGitIgnore("content/.vitepress/dist");
-
-// build package.json
-new JsonFile(project, "package.json", {
-  obj: {
-    name: "cameronchildress.com",
-    version: "0.0.0",
-    type: "module",
-    devDependencies: {
-      projen: "^0.82.6",
-      "vite-node": "^1.6.0",
-      vitepress: "^1.2.3",
-      "vitepress-sidebar": "^1.23.2",
-      vue: "^3.4.29",
-    },
-    scripts: {
-      "docs:dev": "vitepress dev content",
-      "docs:build": "vitepress build content",
-      "docs:preview": "vitepress preview content",
-    },
-  },
+/**
+ * This component generates a default Vitepress project using Breeze.
+ */
+const project = new VitepressProject({
+  name: "cameronchildress.com",
+  devDeps: ["@sumoc/breeze@^0.0.25", "vitepress-sidebar"],
 });
 
+/**
+ * Add a Netlify deployment task for the site..
+ */
+new NetlifyDeploy(project, { siteId: NETLIFY_SITE_ID });
+
+/**
+ * Generate the project
+ */
 project.synth();
