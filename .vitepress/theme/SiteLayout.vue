@@ -1,12 +1,12 @@
-<!--.vitepress/theme/MyLayout.vue-->
 <script setup>
-import DefaultTheme from 'vitepress/theme'
-
-const { Layout } = DefaultTheme
+import DefaultTheme from "vitepress/theme";
+const { Layout } = DefaultTheme;
 </script>
 
 <template>
   <Layout>
-    <Content />
+    <!-- <template #aside-outline-before>
+      My custom sidebar top content
+    </template> -->
   </Layout>
 </template>

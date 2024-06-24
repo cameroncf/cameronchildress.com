@@ -1,7 +1,13 @@
 ---
 outline: deep
-
+index: chrono
 ---
+
+<script setup>
+import { data } from '../data/posts.data'
+</script>
+
+<pre>{{ data }}</pre>
 
 
 # foo
