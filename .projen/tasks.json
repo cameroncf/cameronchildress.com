@@ -61,31 +61,7 @@
       "description": "Only compile",
       "steps": [
         {
-          "spawn": "content:build"
-        }
-      ]
-    },
-    "content:build": {
-      "name": "content:build",
-      "steps": [
-        {
-          "exec": "vitepress build content"
-        }
-      ]
-    },
-    "content:dev": {
-      "name": "content:dev",
-      "steps": [
-        {
-          "exec": "vitepress dev content"
-        }
-      ]
-    },
-    "content:preview": {
-      "name": "content:preview",
-      "steps": [
-        {
-          "exec": "vitepress preview content"
+          "spawn": "vp:build"
         }
       ]
     },
@@ -176,19 +152,43 @@
       },
       "steps": [
         {
-          "exec": "pnpm dlx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=eslint-config-prettier,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,prettier,projen,typescript,vite-node,vitepress,vitepress-sidebar,vue"
+          "exec": "pnpm dlx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=eslint-config-prettier,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,prettier,projen,typescript,vite,vite-node,vitepress,vitepress-sidebar,vue"
         },
         {
           "exec": "pnpm i --no-frozen-lockfile"
         },
         {
-          "exec": "pnpm update @sumoc/breeze @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser constructs eslint-config-prettier eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint prettier projen typescript vite-node vitepress vitepress-sidebar vue eslint-plugin-require-node-import-prefix"
+          "exec": "pnpm update @sumoc/breeze @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser constructs eslint-config-prettier eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint prettier projen typescript vite vite-node vitepress vitepress-sidebar vue eslint-plugin-require-node-import-prefix"
         },
         {
           "exec": "npx projen"
         },
         {
           "spawn": "post-upgrade"
+        }
+      ]
+    },
+    "vp:build": {
+      "name": "vp:build",
+      "steps": [
+        {
+          "exec": "vitepress build"
+        }
+      ]
+    },
+    "vp:dev": {
+      "name": "vp:dev",
+      "steps": [
+        {
+          "exec": "vitepress dev"
+        }
+      ]
+    },
+    "vp:preview": {
+      "name": "vp:preview",
+      "steps": [
+        {
+          "exec": "vitepress preview"
         }
       ]
     },

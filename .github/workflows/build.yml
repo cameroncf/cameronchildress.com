@@ -51,13 +51,13 @@ jobs:
           cat .repo.patch
           exit 1
       - name: Backup artifact permissions
-        run: cd content/.vitepress/dist && getfacl -R . > permissions-backup.acl
+        run: cd .vitepress/dist && getfacl -R . > permissions-backup.acl
         continue-on-error: true
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: build-artifact
-          path: content/.vitepress/dist
+          path: .vitepress/dist
           overwrite: true
   self-mutation:
     needs: build
@@ -104,9 +104,9 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifact
-          path: content/.vitepress/dist
+          path: .vitepress/dist
       - name: Restore build artifact permissions
-        run: cd content/.vitepress/dist && setfacl --restore=permissions-backup.acl
+        run: cd .vitepress/dist && setfacl --restore=permissions-backup.acl
         continue-on-error: true
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
@@ -120,7 +120,7 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: 7840347a-1605-469f-878f-bc76c7333db4
         run: |-
-          NETLIFY_URL=$(netlify deploy --dir=content/.vitepress/dist --json | jq '.deploy_url' --raw-output)
+          NETLIFY_URL=$(netlify deploy --dir=.vitepress/dist --json | jq '.deploy_url' --raw-output)
           echo "NETLIFY_URL=$NETLIFY_URL" >> "$GITHUB_OUTPUT"
       - name: Publish Summary
         env:

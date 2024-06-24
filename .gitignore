@@ -43,7 +43,7 @@ jspm_packages/
 !/tsconfig.build.json
 !/.eslintrc.json
 !/.vscode/settings.json
-content/.vitepress/dist
-content/.vitepress/cache
+.vitepress/dist
+.vitepress/cache
 !/.github/workflows/deploy_cameronchildress.com.yml
 !/.projenrc.ts

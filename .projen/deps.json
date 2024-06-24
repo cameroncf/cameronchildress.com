@@ -59,6 +59,10 @@
       "type": "build"
     },
     {
+      "name": "vite",
+      "type": "build"
+    },
+    {
       "name": "vite-node",
       "type": "build"
     },
