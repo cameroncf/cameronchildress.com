@@ -24,8 +24,7 @@ export const blogMenu = Object.entries(sidebar).reduce((acc, [key, value]) => {
 
       console.log("year:", year);
       console.log("month:", month);
-    })
-    
+    });
   });
 
   acc[key] = value;

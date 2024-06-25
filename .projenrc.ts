@@ -1,4 +1,3 @@
-
 import { NetlifyDeploy, VitepressProject } from "@sumoc/breeze";
 
 /**
