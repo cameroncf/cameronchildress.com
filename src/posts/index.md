@@ -9,8 +9,8 @@ import { data } from '../data/posts.data'
 
 <pre>{{ data }}</pre>
 
-
 # foo
 
 ## bar
+
 lhk kjh y kyloik j;klj lkj

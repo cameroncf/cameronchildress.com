@@ -75,6 +75,10 @@
       "type": "build"
     },
     {
+      "name": "vitest",
+      "type": "build"
+    },
+    {
       "name": "vue",
       "type": "build"
     },
