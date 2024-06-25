@@ -15,7 +15,12 @@ const NETLIFY_SITE_ID = "7840347a-1605-469f-878f-bc76c7333db4";
  */
 const project = new VitepressProject({
   name: "cameronchildress.com",
-  devDeps: ["@sumoc/breeze@^0.0.29", "vitepress-sidebar", "vitest"],
+  devDeps: ["@sumoc/breeze@^0.0.29", "vitepress-sidebar"],
+
+  /**
+   * Turn on vitest so we can test  sidebar customizations.
+   */
+  vitest: true,
 });
 
 /**
