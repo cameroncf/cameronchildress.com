@@ -15,6 +15,10 @@ const config = defineConfig({
       { text: "Resume", link: "/resume/" },
     ],
 
+
+
+
+    
     sidebar: VitePressSidebar.generateSidebar([
       {
         documentRootPath: "src",

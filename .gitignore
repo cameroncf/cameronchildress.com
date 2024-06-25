@@ -42,6 +42,7 @@ jspm_packages/
 /dist/
 !/.eslintrc.json
 !/.vscode/settings.json
+!/.eslintignore
 .vitepress/dist
 .vitepress/cache
 !/.github/workflows/deploy_cameronchildress.com.yml

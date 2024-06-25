@@ -1,4 +1,4 @@
-import VitePressSidebar from "vitepress-sidebar";
+import VitePressSidebar, { Sidebar, SidebarMultiItem } from "vitepress-sidebar";
 
 export const sidebar = VitePressSidebar.generateSidebar([
   {
@@ -10,23 +10,29 @@ export const sidebar = VitePressSidebar.generateSidebar([
     useFolderLinkFromIndexFile: true,
     sortMenusByFrontmatterDate: true,
   },
-]);
+]) as Sidebar;
 
-export const blogMenu = Object.entries(sidebar).reduce((acc, [key, value]) => {
-  console.log("key:", key);
+export const blogMenu = Object.entries(sidebar).reduce(
+  (
+    acc,
+    [key, value],
+  ): { acc: any; f: Array<Record<string, SidebarMultiItem>> } => {
+    console.log("key:", key);
 
-  // years
-  value.items.forEach((y) => {
-    const year = y.text;
+    // years
+    value.items.forEach((y) => {
+      const year = y.text;
 
-    y.items.forEach((m) => {
-      const month = m.text;
+      y.items.forEach((m: string) => {
+        const month = m.text;
 
-      console.log("year:", year);
-      console.log("month:", month);
+        console.log("year/month:", year, month);
+      });
     });
-  });
 
-  acc[key] = value;
-  return acc;
-}, {});
+    acc[key] = {};
+
+    return acc;
+  },
+  {},
+);

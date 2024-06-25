@@ -13,8 +13,8 @@ importers:
         version: 0.0.2
     devDependencies:
       '@sumoc/breeze':
-        specifier: ^0.0.30
-        version: 0.0.30(constructs@10.3.0)
+        specifier: ^0.0.31
+        version: 0.0.31(constructs@10.3.0)
       '@types/node':
         specifier: ^20
         version: 20.14.8
@@ -491,8 +491,8 @@ packages:
   '@sinclair/typebox@0.27.8':
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
 
-  '@sumoc/breeze@0.0.30':
-    resolution: {integrity: sha512-tgeF/6CdGlju1+UAUQ8LLrumPgu+87+xl8ktyV+aok3fdSN4sz0hSHMcIbJugQZTuVDBHOATI9g21jXanzDYMw==}
+  '@sumoc/breeze@0.0.31':
+    resolution: {integrity: sha512-xGamkuy143iIA5v+SxlcOz77mvGgIFvkSmik81m3z68yuHmxCM/PzqUt1hYQ8TXHkCT0kK9Mi2PWn5IOu3X8lw==}
     engines: {node: '>= 20.15.0'}
 
   '@types/estree@1.0.5':
@@ -2343,7 +2343,7 @@ snapshots:
 
   '@sinclair/typebox@0.27.8': {}
 
-  '@sumoc/breeze@0.0.30(constructs@10.3.0)':
+  '@sumoc/breeze@0.0.31(constructs@10.3.0)':
     dependencies:
       '@jsii/spec': 1.100.0
       eslint-plugin-require-node-import-prefix: 0.0.2
