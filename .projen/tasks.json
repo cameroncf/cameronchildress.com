@@ -91,7 +91,7 @@
       "description": "Runs eslint against the codebase",
       "steps": [
         {
-          "exec": "eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern $@ src",
+          "exec": "eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern $@ .vitepress projenrc .projenrc.ts",
           "receiveArgs": true
         }
       ]
@@ -128,12 +128,7 @@
     },
     "pre-compile": {
       "name": "pre-compile",
-      "description": "Prepare the project for compilation",
-      "steps": [
-        {
-          "exec": "rm -rf lib"
-        }
-      ]
+      "description": "Prepare the project for compilation"
     },
     "test": {
       "name": "test",
@@ -197,12 +192,7 @@
     },
     "watch": {
       "name": "watch",
-      "description": "Watch & compile in the background",
-      "steps": [
-        {
-          "exec": "tsc --build tsconfig.build.json -w"
-        }
-      ]
+      "description": "Watch & compile in the background"
     }
   },
   "env": {

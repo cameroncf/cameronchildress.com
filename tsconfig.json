@@ -29,8 +29,7 @@
     "skipLibCheck": true
   },
   "include": [
-    "src/**/*.ts",
-    "vite.config.ts",
+    ".vitepress/**/*.ts",
     ".projenrc.ts",
     "projenrc/**/*.ts"
   ],
