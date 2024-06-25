@@ -20,7 +20,7 @@
     "projen": "npx projen"
   },
   "devDependencies": {
-    "@sumoc/breeze": "^0.0.29",
+    "@sumoc/breeze": "^0.0.30",
     "@types/node": "^20",
     "@typescript-eslint/eslint-plugin": "^7",
     "@typescript-eslint/parser": "^7",
