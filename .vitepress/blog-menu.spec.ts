@@ -4,6 +4,6 @@ import { blogMenu } from "./blog-menu";
 describe("Sidebar", () => {
   it("should generate monthly lists", () => {
     expect(blogMenu).toBeDefined();
-    console.log(JSON.stringify(blogMenu, null, 2));
+    // console.log(JSON.stringify(blogMenu, null, 2));
   });
 });

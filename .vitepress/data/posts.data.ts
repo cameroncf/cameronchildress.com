@@ -18,8 +18,7 @@ export default createContentLoader("./posts/**/*.md", {
   transform(raw): Post[] {
     return raw
       .filter(
-        ({ frontmatter }) =>
-          frontmatter.date && frontmatter.published !== false,
+        ({ frontmatter }) => frontmatter.date && frontmatter.draft !== true,
       )
       .map(({ url, frontmatter, excerpt }) => ({
         title: frontmatter.title,

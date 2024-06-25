@@ -7,8 +7,4 @@ import "./style.css";
 export default {
   extends: DefaultTheme,
   Layout: SiteLayout,
-
-  enhanceApp({ app, router, siteData }) {
-    // ...
-  },
 } satisfies Theme;

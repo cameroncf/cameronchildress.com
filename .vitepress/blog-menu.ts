@@ -14,6 +14,7 @@ export const sidebar = VitePressSidebar.generateSidebar([
     useFolderLinkFromIndexFile: true,
     sortMenusByFrontmatterDate: true,
     sortMenusOrderByDescending: true,
+    excludeFilesByFrontmatterFieldName: "draft",
   },
 ]) as SidebarMulti;
 
@@ -23,13 +24,19 @@ export const blogMenu = Object.entries(sidebar).reduce(
 
     value.items.forEach((year) => {
       year.items?.forEach((month) => {
-      
+        const monthRoll: Array<SidebarItem> = [];
+
+        month.items?.forEach((day) => {
+          day.items?.forEach((post) => {
+            //const d = formatDayWithSuffix(Number(day.text));
+            monthRoll.push({ ...post });
+          });
+        });
+
+        // build the month's list of posts
         items.push({
           text: formatDate(`1-${month.text}-${year.text}`),
-          items: month.items?.reduce((acc, post) => {
-            acc.push({ ...post });
-            return acc;
-          }, [] as Array<SidebarItem>),
+          items: monthRoll,
         });
       });
     });
@@ -48,3 +55,19 @@ function formatDate(raw: string): string {
     month: "long",
   });
 }
+/*
+function formatDayWithSuffix(day: number): string {
+  const j = day % 10,
+        k = day % 100;
+  if (j == 1 && k != 11) {
+    return day + "st";
+  }
+  if (j == 2 && k != 12) {
+    return day + "nd";
+  }
+  if (j == 3 && k != 13) {
+    return day + "rd";
+  }
+  return day + "th";
+}
+  */

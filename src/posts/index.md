@@ -1,16 +1,19 @@
 ---
-outline: deep
-index: chrono
+title: The Blog
+outline: false
 ---
 
 <script setup>
-import { data } from '../../.vitepress/data/posts.data'
+import { data as posts } from '../../.vitepress/data/posts.data'
 </script>
 
-<pre>{{ data }}</pre>
 
-# foo
+<h1>All Blog Posts</h1>
 
-## bar
 
-lhk kjh y kyloik j;klj lkj
+<ul>
+  <li v-for="post of posts">
+    {{ post.date.string }} - <a :href="post.url">{{ post.title }}</a>
+  </li>
+</ul>
+

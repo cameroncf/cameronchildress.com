@@ -1,5 +1,4 @@
 import { defineConfig } from "vitepress";
-import VitePressSidebar from "vitepress-sidebar";
 import { blogMenu } from "./blog-menu";
 
 // https://vitepress.dev/reference/site-config
