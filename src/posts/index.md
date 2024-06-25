@@ -1,5 +1,5 @@
 ---
-title: The Blog
+title: Recent Popsts
 outline: false
 ---
 
@@ -8,7 +8,7 @@ import { data as posts } from '../../.vitepress/data/posts.data'
 </script>
 
 
-<h1>All Blog Posts</h1>
+# Recent Posts
 
 
 <ul>

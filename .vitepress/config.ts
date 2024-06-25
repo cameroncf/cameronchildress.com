@@ -46,6 +46,9 @@ const config = defineConfig({
 
   sitemap: {
     hostname: "https://www.cameronchildress.com",
+    transformItems: (items) => {
+      return items.filter((item) => item.url.substring(0, 6) !== "drafts");
+    },
   },
 });
 
