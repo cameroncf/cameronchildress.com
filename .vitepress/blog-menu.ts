@@ -1,4 +1,8 @@
-import VitePressSidebar, { Sidebar, SidebarMultiItem } from "vitepress-sidebar";
+import VitePressSidebar, {
+  SidebarItem,
+  SidebarMulti,
+  SidebarMultiItem,
+} from "vitepress-sidebar";
 
 export const sidebar = VitePressSidebar.generateSidebar([
   {
@@ -9,30 +13,38 @@ export const sidebar = VitePressSidebar.generateSidebar([
     useFolderTitleFromIndexFile: true,
     useFolderLinkFromIndexFile: true,
     sortMenusByFrontmatterDate: true,
+    sortMenusOrderByDescending: true,
   },
-]) as Sidebar;
+]) as SidebarMulti;
 
 export const blogMenu = Object.entries(sidebar).reduce(
-  (
-    acc,
-    [key, value],
-  ): { acc: any; f: Array<Record<string, SidebarMultiItem>> } => {
-    console.log("key:", key);
+  (acc, [key, value]) => {
+    const items: Array<SidebarItem> = [];
 
-    // years
-    value.items.forEach((y) => {
-      const year = y.text;
-
-      y.items.forEach((m: string) => {
-        const month = m.text;
-
-        console.log("year/month:", year, month);
+    value.items.forEach((year) => {
+      year.items?.forEach((month) => {
+      
+        items.push({
+          text: formatDate(`1-${month.text}-${year.text}`),
+          items: month.items?.reduce((acc, post) => {
+            acc.push({ ...post });
+            return acc;
+          }, [] as Array<SidebarItem>),
+        });
       });
     });
 
-    acc[key] = {};
-
+    acc[key] = { base: value.base, items };
     return acc;
   },
-  {},
+  {} as Record<string, SidebarMultiItem>,
 );
+
+function formatDate(raw: string): string {
+  const date = new Date(raw);
+  date.setUTCHours(12);
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+  });
+}

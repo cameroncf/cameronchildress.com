@@ -4,7 +4,7 @@ index: chrono
 ---
 
 <script setup>
-import { data } from '../data/posts.data'
+import { data } from '../../.vitepress/data/posts.data'
 </script>
 
 <pre>{{ data }}</pre>
