@@ -40,7 +40,9 @@
     "*.d.ts",
     "node_modules/",
     "*.generated.ts",
-    "coverage"
+    "coverage",
+    "!.projenrc.ts",
+    "!projenrc/**/*.ts"
   ],
   "rules": {
     "@typescript-eslint/no-require-imports": [
@@ -49,7 +51,13 @@
     "import/no-extraneous-dependencies": [
       "error",
       {
-        "devDependencies": [],
+        "devDependencies": [
+          "**/*.spec.ts",
+          "**/*.spec.tsx",
+          ".vitepress/**/*.ts",
+          ".projenrc.ts",
+          "projenrc/**/*.ts"
+        ],
         "optionalDependencies": false,
         "peerDependencies": true
       }
@@ -124,11 +132,10 @@
   "overrides": [
     {
       "files": [
-        "**/*.spec.ts",
-        "**/*.spec.tsx",
-        "vite.config.ts"
+        ".projenrc.ts"
       ],
       "rules": {
+        "@typescript-eslint/no-require-imports": "off",
         "import/no-extraneous-dependencies": "off"
       }
     }

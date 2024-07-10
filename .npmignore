@@ -14,7 +14,6 @@ dist
 /.idea/
 /.projenrc.js
 tsconfig.tsbuildinfo
-/tsconfig.build.json
 /.eslintrc.json
 permissions-backup.acl
 /.gitattributes
