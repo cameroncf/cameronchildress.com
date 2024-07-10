@@ -37,4 +37,4 @@ All of these things have been solved by others in a variety of ways already. So 
 
 ## Projen Presentation
 
-Lastly, I'll be giving a talk on [Projen](https://projen.io/) to the Atlanta Javascript Meetup on August 27th called [Node Project Configuration Management at Scale](https://www.meetup.com/atlantajavascript/events/301988391/), and I plan to post about Projen a good bit while I'm developing material for this presentation.
+Lastly, I'll be giving a talk on [Projen](https://projen.io/) (which this site also uses as a build tool) to the Atlanta Javascript Meetup on August 27th called [Node Project Configuration Management at Scale](https://www.meetup.com/atlantajavascript/events/301988391/), and I plan to post about Projen a good bit while I'm developing material for this presentation.
