@@ -9,17 +9,20 @@ const config = defineConfig({
   cleanUrls: true,
   head: [
     [
-      'script',
-      { async: '', src: 'https://www.googletagmanager.com/gtag/js?id=G-CPB7J6V4RN' }
+      "script",
+      {
+        async: "",
+        src: "https://www.googletagmanager.com/gtag/js?id=G-CPB7J6V4RN",
+      },
     ],
     [
-      'script',
+      "script",
       {},
       `window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-CPB7J6V4RN');`
-    ]
+      gtag('config', 'G-CPB7J6V4RN');`,
+    ],
   ],
 
   themeConfig: {
