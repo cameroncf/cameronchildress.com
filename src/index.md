@@ -8,11 +8,12 @@ hero:
   tagline: A minimal site built with VitePress
   actions:
     - theme: brand
-      text: My Resume
+      text: Blog 
+      link: /posts
+    - theme: alt
+      text: Resume
       link: /resume
-    # - theme: alt
-    #   text: API Examples
-    #   link: /api-examples
+    
 
 # features:
 #   - title: Feature A
