@@ -1,5 +1,5 @@
 ---
-title: Recent Popsts
+title: Recent Posts
 outline: false
 ---
 
