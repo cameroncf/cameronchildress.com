@@ -7,6 +7,21 @@ const config = defineConfig({
   title: "Cameron Childress",
   description: "My Personal Site",
   cleanUrls: true,
+  head: [
+    [
+      'script',
+      { async: '', src: 'https://www.googletagmanager.com/gtag/js?id=G-CPB7J6V4RN' }
+    ],
+    [
+      'script',
+      {},
+      `window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-CPB7J6V4RN');`
+    ]
+  ],
+
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
