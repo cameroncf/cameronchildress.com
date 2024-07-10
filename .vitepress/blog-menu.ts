@@ -35,7 +35,7 @@ export const blogMenu = Object.entries(sidebar).reduce(
 
         // build the month's list of posts
         items.push({
-          text: formatDate(`1-${month.text}-${year.text}`),
+          text: formatDate(`${month.text}-1-${year.text}`),
           items: monthRoll,
         });
       });
