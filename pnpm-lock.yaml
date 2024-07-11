@@ -49,8 +49,8 @@ importers:
         specifier: ^3.3.2
         version: 3.3.2
       projen:
-        specifier: ^0.84.3
-        version: 0.84.3(constructs@10.3.0)
+        specifier: ^0.84.4
+        version: 0.84.4(constructs@10.3.0)
       typescript:
         specifier: ^5.5.3
         version: 5.5.3
@@ -1605,8 +1605,8 @@ packages:
       - yaml
       - yargs
 
-  projen@0.84.3:
-    resolution: {integrity: sha512-47Mf61Sxm17SfUwEam5XIW+S4lKjcXsi3Z2AiUP8XqFfDS94vNvG6/9Od625oNQoa5YIB3R1JQQSFuc4Tre/Wg==}
+  projen@0.84.4:
+    resolution: {integrity: sha512-hlyBtIwc+As3KuiaSGQ5d0dVyE5Jc6SfnhIxyE1VqlgHvKpPVhvun+2gwH4CFtQyxjEGh4bHoU/aS7P5McqfGA==}
     engines: {node: '>= 16.0.0'}
     hasBin: true
     peerDependencies:
@@ -3689,7 +3689,7 @@ snapshots:
     dependencies:
       constructs: 10.3.0
 
-  projen@0.84.3(constructs@10.3.0):
+  projen@0.84.4(constructs@10.3.0):
     dependencies:
       constructs: 10.3.0
 
