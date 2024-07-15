@@ -150,13 +150,13 @@
       },
       "steps": [
         {
-          "exec": "pnpm dlx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@vitest/coverage-v8,eslint-config-prettier,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,prettier,projen,typescript,vite,vite-node,vitepress,vitepress-sidebar,vitest,vue"
+          "exec": "pnpm dlx npm-check-updates@16 --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@vitest/coverage-v8,eslint-config-prettier,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,feed,prettier,projen,typescript,vite,vite-node,vitepress,vitepress-sidebar,vitest,vue"
         },
         {
           "exec": "pnpm i --no-frozen-lockfile"
         },
         {
-          "exec": "pnpm update @sumoc/breeze @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser @vitest/coverage-v8 constructs eslint-config-prettier eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint prettier projen typescript vite vite-node vitepress vitepress-sidebar vitest vue eslint-plugin-require-node-import-prefix"
+          "exec": "pnpm update @sumoc/breeze @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser @vitest/coverage-v8 constructs eslint-config-prettier eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint feed prettier projen typescript vite vite-node vitepress vitepress-sidebar vitest vue eslint-plugin-require-node-import-prefix"
         },
         {
           "exec": "npx projen"

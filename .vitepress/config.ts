@@ -1,5 +1,6 @@
 import { defineConfig } from "vitepress";
 import { blogMenu } from "./blog-menu";
+import { generateRssFeed } from "./generate-rss-feed";
 
 // https://vitepress.dev/reference/site-config
 const config = defineConfig({
@@ -32,6 +33,11 @@ const config = defineConfig({
       },
     ],
   ],
+
+  /**
+   * Generates RSS Feed
+   */
+  buildEnd: generateRssFeed,
 
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
