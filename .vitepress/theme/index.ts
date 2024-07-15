@@ -9,4 +9,3 @@ export default {
   extends: DefaultTheme,
   Layout: SiteLayout,
 } as Theme;
-
