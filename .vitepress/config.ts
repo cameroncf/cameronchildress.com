@@ -23,6 +23,14 @@ const config = defineConfig({
       gtag('js', new Date());
       gtag('config', 'G-CPB7J6V4RN');`,
     ],
+    // verification for Search Console
+    [
+      "meta",
+      {
+        name: "google-site-verification",
+        content: "ZdRcnihTLvo3URnfndsJ0pSpzniaVzEZsdTdaGsSPfs",
+      },
+    ],
   ],
 
   themeConfig: {
