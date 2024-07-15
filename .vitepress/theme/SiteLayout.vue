@@ -4,10 +4,13 @@ import DefaultTheme from "vitepress/theme";
 const { Layout } = DefaultTheme;
 const { page } = useData();
 
-const foo = (raw) => {
+const formatDate = (raw) => {
+  // no date supplied
+  if (!raw) return "";
+  // date found, format it
   const date = new Date(raw);
   date.setUTCHours(12);
-  return date.toLocaleDateString("en-US", {
+  return " / " + date.toLocaleDateString("en-US", {
       year: "numeric",
       month: "long",
       day: "numeric",
@@ -17,8 +20,8 @@ const foo = (raw) => {
 
 <template>
   <Layout>
-    <template #doc-before>
-      <div>Posted By: {{ page.frontmatter.author }} / {{ foo(page.frontmatter.date) }} <br/><br/></div>
+    <template #doc-before v-if="page.frontmatter.author">
+      <div>Posted By: {{ page.frontmatter.author }}{{ formatDate(page.frontmatter.date) }} <br/><br/></div>
     </template>
   </Layout>
 </template>
