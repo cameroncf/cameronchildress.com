@@ -1,6 +1,7 @@
 ---
 title: Blogging Again
 date: 2024-07-10
+author: Cameron Childress
 ---
 
 # Blogging Again

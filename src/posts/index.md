@@ -1,6 +1,7 @@
 ---
 title: Recent Posts
 outline: false
+excludeFromRss: true
 ---
 
 <script setup>
