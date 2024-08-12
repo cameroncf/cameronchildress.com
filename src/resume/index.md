@@ -40,10 +40,16 @@ A seasoned leader with a passion for all things software and technology. I've he
 ## Work Experience
 
 ### Sumo Consulting
-_Apr 2022 - Present_
+_Apr 2002 - Present_
 
-As the **President** of [Sumo Consulting](https://www.sumoc.com), I help clients solve unique business problems through software. Past and current clients include PGA of America, Oregon Health and Science University, Baylor University, NATO, Turner Sports, Thermo Fisher Scientific, and many more...
+As the **President** of [Sumo Consulting](https://www.sumoc.com), I help clients solve unique business problems through software. Past and current clients include PGA of America, Oregon Health and Science University, Baylor University, NATO, Turner Sports, Thermo Fisher Scientific, and many more.
 
+- Lead and mentor teams modernizing legacy environments into cloud environments.
+- FinOps - Analyze cloud spend. Make and implement changes to optimize cost.
+- Architect and build CI/CD Pipelines which enforce quality and compliance standards.
+- Architect solutions using AWS's Well Architected Framework.
+- Architect and build Services and Microservices using Infrastructure as Code.
+- Conduct code reviews and make recommendations on patterns and refactoring.
 
 ### Invitrogen
 _Nov 2005 - Mar 2007_
