@@ -45,5 +45,4 @@ jspm_packages/
 !/.eslintignore
 .vitepress/dist
 .vitepress/cache
-!/.github/workflows/deploy_cameronchildress.com.yml
 !/.projenrc.ts
